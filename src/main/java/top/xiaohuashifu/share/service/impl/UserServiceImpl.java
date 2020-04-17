@@ -40,24 +40,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 获取UserDO通过username
-     *
-     * @param username 用户名
-     * @return Result<UserDO>
-     */
-    @Override
-    public Result<UserDO> getUserByUsername(String username) {
-        UserDO userDO = userMapper.getUserByUsername(username);
-        if (userDO == null) {
-            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The specified user for username="
-                    + username + " does not exist.");
-        }
-        return Result.success(userDO);
-    }
-
-    /**
      * 保存User
      * @param userDO UserDO
+     * @param avatar 头像
      * @return Result<UserDO>
      */
     @Override
@@ -112,7 +97,23 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 获取UserDOList通过查询参数qquery
+     * 获取UserDO通过username
+     *
+     * @param username 用户名
+     * @return Result<UserDO>
+     */
+    @Override
+    public Result<UserDO> getUserByUsername(String username) {
+        UserDO userDO = userMapper.getUserByUsername(username);
+        if (userDO == null) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The specified user for username="
+                    + username + " does not exist.");
+        }
+        return Result.success(userDO);
+    }
+
+    /**
+     * 获取UserDOList通过查询参数query
      *
      * @param query 查询参数
      * @return UserDOList
@@ -132,13 +133,18 @@ public class UserServiceImpl implements UserService {
      * 更新用户信息
      *
      * @param userDO 要更新的信息
+     * @param avatar 要更新的头像
      * @return 更新后的用户信息
      */
     @Override
-    public Result<UserDO> updateUser(UserDO userDO) {
-        //只给更新某些属性
+    public Result<UserDO> updateUser(UserDO userDO, MultipartFile avatar) {
+        // 若头像参数不为空，更新头像
+        if (avatar != null) {
+            return updateAvatar(userDO.getId(), avatar);
+        }
+
+        // 只能更新指定属性
         UserDO userDO0 = new UserDO();
-        userDO0.setUsername(userDO.getUsername());
         userDO0.setPassword(userDO.getPassword());
         userDO0.setNickName(userDO.getNickName());
         userDO0.setGender(userDO.getGender());
@@ -168,8 +174,7 @@ public class UserServiceImpl implements UserService {
      * @param avatar MultipartFile
      * @return 新文件url
      */
-    @Override
-    public Result<UserDO> updateAvatar(Integer id, MultipartFile avatar) {
+    private Result<UserDO> updateAvatar(Integer id, MultipartFile avatar) {
         // 获取用户信息，主要是为了获取旧文件Url
         UserDO userDO = userMapper.getUser(id);
 

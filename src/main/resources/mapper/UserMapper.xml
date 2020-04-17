@@ -87,10 +87,7 @@
                 )
             </if>
             <if test="username != null">
-                and username like "%"#{username}"%"
-            </if>
-            <if test="nickName != null">
-                and nick_name like "%"#{nickName}"%"
+                and username = #{username}
             </if>
             <if test="gender != null">
                 and gender = #{gender}
@@ -111,9 +108,6 @@
     <update id="updateUser" parameterType="top.xiaohuashifu.share.pojo.do0.UserDO">
         update user
         <set>
-            <if test="username != null">
-                username = #{username},
-            </if>
             <if test="password != null">
                 password = #{password},
             </if>

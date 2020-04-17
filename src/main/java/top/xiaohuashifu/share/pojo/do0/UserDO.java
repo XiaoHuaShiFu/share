@@ -3,6 +3,7 @@ package top.xiaohuashifu.share.pojo.do0;
 import top.xiaohuashifu.share.constant.Gender;
 import top.xiaohuashifu.share.pojo.group.Group;
 import top.xiaohuashifu.share.pojo.group.GroupPost;
+import top.xiaohuashifu.share.pojo.group.GroupPut;
 import top.xiaohuashifu.share.validator.annotation.*;
 
 import javax.validation.constraints.NotBlank;
@@ -21,6 +22,8 @@ public class UserDO {
 
     @Null(message = "INVALID_PARAMETER: The id must be null.",
             groups = {GroupPost.class})
+    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The id must be not null.",
+            groups = {GroupPut.class})
     @Id(groups = {Group.class})
     private Integer id;
 

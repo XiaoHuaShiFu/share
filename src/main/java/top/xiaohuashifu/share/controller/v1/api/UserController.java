@@ -48,6 +48,7 @@ public class UserController {
     /**
      * 创建User并返回User
      * @param userDO 用户信息
+     * @param avatar 头像
      * @return UserVO
      *
      * @success:
@@ -74,7 +75,7 @@ public class UserController {
         return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
     }
 
-    // TODO: 2020/3/31 这里在不同权限下应该返回不同的数据,
+    // TODO: 这里在不同权限下应该返回不同的数据,
     //  ADMIN返回的信息应该多过USER
     /**
      * 获取user
@@ -107,7 +108,7 @@ public class UserController {
             return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
         }
 
-        //非法权限token
+        // 非法权限token
         return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
     }
 
@@ -138,13 +139,14 @@ public class UserController {
      * 更新User并返回User
      * @param tokenAO TokenAO
      * @param userDO User信息
+     * @param avatar 要更新的头像
      * @return UserVO
      *
      * @success:
      * HttpStatus.OK
      *
      * @errors:
-     * INTERNAL_ERROR: Update avatar failed.
+     * INTERNAL_ERROR
      *
      * @bindErrors
      * INVALID_PARAMETER
@@ -159,47 +161,20 @@ public class UserController {
     // TODO: 2020/3/31 ADMIN可以控制修改一些信息，USER可以修改一些信息
     @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
     @ErrorHandler
-    public Object put(TokenAO tokenAO, @Validated(Group.class) UserDO userDO) {
-        if (!userDO.getId().equals(tokenAO.getId())) {
-            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+    public Object put(TokenAO tokenAO, @Validated(Group.class) UserDO userDO, MultipartFile avatar) {
+        // 管理员
+        if (tokenAO.getType() == TokenType.ADMIN) {
+            Result<UserDO> result = userService.updateUser(userDO, avatar);
+            return result.isSuccess() ? mapper.map(result.getData(), UserVO.class) : result;
         }
-        Result<UserDO> result = userService.updateUser(userDO);
-
-        return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
-    }
-
-    /**
-     * 修改头像
-     *
-     * @param tokenAO TokenAO
-     * @param avatar MultipartFile
-     * @return UserVO
-     *
-     * @success:
-     * HttpStatus.OK
-     *
-     * @errors:
-     * INTERNAL_ERROR: Upload file failed.
-     * INTERNAL_ERROR: Delete file failed.
-     * INTERNAL_ERROR: Update avatar exception.
-     *
-     * @bindErrors
-     * INVALID_PARAMETER_IS_NULL
-     */
-    @RequestMapping(value="/avatar", method = RequestMethod.PUT)
-    @ResponseStatus(value = HttpStatus.OK)
-    @TokenAuth(tokenType = TokenType.USER)
-    @ErrorHandler
-    public Object putAvatar(
-            TokenAO tokenAO,
-            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The id must be not null.") @Id Integer id,
-            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.") MultipartFile avatar) {
-        if (!tokenAO.getId().equals(id)) {
-            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        // 用户本人
+        else if (userDO.getId().equals(tokenAO.getId())) {
+            Result<UserDO> result = userService.updateUser(userDO, avatar);
+            return result.isSuccess() ? mapper.map(result.getData(), UserVO.class) : result;
         }
-        Result<UserDO> result = userService.updateAvatar(tokenAO.getId(), avatar);
 
-        return result.isSuccess() ? mapper.map(result.getData(), UserVO.class) : result;
+        // 非法权限token
+        return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
     }
 
 }

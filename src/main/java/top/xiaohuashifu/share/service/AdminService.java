@@ -7,7 +7,7 @@ import top.xiaohuashifu.share.pojo.do0.AdminLogDO;
 import top.xiaohuashifu.share.result.Result;
 
 public interface AdminService {
-	Result<AdminDO> getAdminByJobNumber(String jobNumber);
+	Result<AdminDO> getAdminByUsername(String username);
 
 	Result saveAdminLog(AdminLogDO adminLogDO);
 

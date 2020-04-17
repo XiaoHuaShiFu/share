@@ -42,7 +42,6 @@ public class FileServiceImpl implements FileService {
             //将file上传到ftp服务器
             success = ftpClientTemplate.uploadFile(directoryPath, bufFile);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Upload file failed.");
         }
         //删除本地缓存文件
@@ -111,7 +110,7 @@ public class FileServiceImpl implements FileService {
         //解析url
         FileUrl remoteDirAndFileName = FileNameUtils.parseFileUrl(fileUrl);
         //删除文件
-        delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getDirectoryPath());
+        delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getDirectoryPath().substring(7));
     }
 
     /**

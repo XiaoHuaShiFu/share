@@ -15,15 +15,13 @@ import java.util.List;
  */
 public interface UserService {
 
-    Result<UserDO> getUserByUsername(String username);
-
     Result<UserDO> saveUser(UserDO userDO, MultipartFile avatar);
 
     Result<UserDO> getUser(Integer id);
 
+    Result<UserDO> getUserByUsername(String username);
+
     Result<List<UserDO>> listUsers(UserQuery query);
 
-    Result<UserDO> updateUser(UserDO userDO);
-
-    Result<UserDO> updateAvatar(Integer id, MultipartFile avatar);
+    Result<UserDO> updateUser(UserDO userDO, MultipartFile avatar);
 }

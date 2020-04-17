@@ -20,20 +20,12 @@ public class UserQuery {
 
     private List<Integer> idList;
 
-    /**
-     * 模糊搜素
-     */
-    private String jobNumber;
+    private String username;
 
     /**
      * 模糊搜素
      */
     private String nickName;
-
-    /**
-     * 模糊搜素
-     */
-    private String fullName;
 
     private Gender gender;
 
@@ -47,22 +39,19 @@ public class UserQuery {
      */
     private String email;
 
-
     private Boolean available;
 
     public UserQuery() {
     }
 
-    public UserQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList, String jobNumber,
-                     String nickName, String fullName, Gender gender, String phone, String email,
-                     Boolean available) {
+    public UserQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList, String username,
+                     String nickName, Gender gender, String phone, String email, Boolean available) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.id = id;
         this.idList = idList;
-        this.jobNumber = jobNumber;
+        this.username = username;
         this.nickName = nickName;
-        this.fullName = fullName;
         this.gender = gender;
         this.phone = phone;
         this.email = email;
@@ -101,12 +90,12 @@ public class UserQuery {
         this.idList = idList;
     }
 
-    public String getJobNumber() {
-        return jobNumber;
+    public String getUsername() {
+        return username;
     }
 
-    public void setJobNumber(String jobNumber) {
-        this.jobNumber = jobNumber;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNickName() {
@@ -115,14 +104,6 @@ public class UserQuery {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public Gender getGender() {
@@ -164,9 +145,8 @@ public class UserQuery {
                 ", pageSize=" + pageSize +
                 ", id=" + id +
                 ", idList=" + idList +
-                ", jobNumber='" + jobNumber + '\'' +
+                ", username='" + username + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", fullName='" + fullName + '\'' +
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

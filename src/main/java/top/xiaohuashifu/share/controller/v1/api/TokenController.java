@@ -44,7 +44,7 @@ public class TokenController {
     /**
      * 创建token凭证，通过用户名+密码
     *
-     * @param username 用户名（可以是工号）
+     * @param username 用户名
      * @param password 密码
      * @param tokenType token类型
      * @return TokenAO
@@ -53,8 +53,8 @@ public class TokenController {
      * HttpStatus.CREATED
      *
      * @errors:
-     * INVALID_PARAMETER: The code is not valid.
-     * INVALID_PARAMETER_NOT_FOUND: The specified openid does not exist.
+     * INVALID_PARAMETER
+     * INVALID_PARAMETER_NOT_FOUND
      *
      * INTERNAL_ERROR: Failed to create token.
      * INTERNAL_ERROR: Failed to set expire.

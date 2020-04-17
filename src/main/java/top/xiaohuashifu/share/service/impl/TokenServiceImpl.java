@@ -149,7 +149,7 @@ public class TokenServiceImpl implements TokenService {
     public Result<TokenAO> createAndSaveToken(TokenType tokenType, String username, String password) {
         TokenAO tokenAO = new TokenAO();
         if (tokenType == TokenType.ADMIN) {
-            Result<AdminDO> result = adminService.getAdminByJobNumber(username);
+            Result<AdminDO> result = adminService.getAdminByUsername(username);
             if (!result.isSuccess()) {
                 return Result.fail(result.getErrorCode(), result.getMessage());
             }

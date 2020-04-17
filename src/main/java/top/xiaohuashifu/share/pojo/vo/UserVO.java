@@ -2,7 +2,6 @@ package top.xiaohuashifu.share.pojo.vo;
 
 import top.xiaohuashifu.share.constant.Gender;
 
-import java.util.Date;
 
 /**
  * 描述:
@@ -11,19 +10,14 @@ import java.util.Date;
  * @email 827032783@qq.com
  */
 public class UserVO {
+
     private Integer id;
 
-    private String jobNumber;
-
-    private String password;
+    private String username;
 
     private String nickName;
 
-    private String fullName;
-
     private Gender gender;
-
-    private Date birthday;
 
     private String phone;
 
@@ -31,25 +25,36 @@ public class UserVO {
 
     private String avatarUrl;
 
-    private Integer point;
+    private Integer followers;
+
+    private Integer followings;
+
+    private Integer shares;
+
+    private Integer comments;
+
+    private Integer collections;
 
     private Boolean available;
 
     public UserVO() {
     }
 
-    public UserVO(Integer id, String jobNumber, String password, String nickName, String fullName, Gender gender, Date birthday, String phone, String email, String avatarUrl, Integer point, Boolean available) {
+    public UserVO(Integer id, String username, String nickName, Gender gender, String phone, String email,
+                  String avatarUrl, Integer followers, Integer followings, Integer shares, Integer comments,
+                  Integer collections, Boolean available) {
         this.id = id;
-        this.jobNumber = jobNumber;
-        this.password = password;
+        this.username = username;
         this.nickName = nickName;
-        this.fullName = fullName;
         this.gender = gender;
-        this.birthday = birthday;
         this.phone = phone;
         this.email = email;
         this.avatarUrl = avatarUrl;
-        this.point = point;
+        this.followers = followers;
+        this.followings = followings;
+        this.shares = shares;
+        this.comments = comments;
+        this.collections = collections;
         this.available = available;
     }
 
@@ -61,20 +66,12 @@ public class UserVO {
         this.id = id;
     }
 
-    public String getJobNumber() {
-        return jobNumber;
+    public String getUsername() {
+        return username;
     }
 
-    public void setJobNumber(String jobNumber) {
-        this.jobNumber = jobNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNickName() {
@@ -85,28 +82,12 @@ public class UserVO {
         this.nickName = nickName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public Gender getGender() {
         return gender;
     }
 
     public void setGender(Gender gender) {
         this.gender = gender;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 
     public String getPhone() {
@@ -133,12 +114,44 @@ public class UserVO {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getPoint() {
-        return point;
+    public Integer getFollowers() {
+        return followers;
     }
 
-    public void setPoint(Integer point) {
-        this.point = point;
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
+    }
+
+    public Integer getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Integer followings) {
+        this.followings = followings;
+    }
+
+    public Integer getShares() {
+        return shares;
+    }
+
+    public void setShares(Integer shares) {
+        this.shares = shares;
+    }
+
+    public Integer getComments() {
+        return comments;
+    }
+
+    public void setComments(Integer comments) {
+        this.comments = comments;
+    }
+
+    public Integer getCollections() {
+        return collections;
+    }
+
+    public void setCollections(Integer collections) {
+        this.collections = collections;
     }
 
     public Boolean getAvailable() {
@@ -153,16 +166,17 @@ public class UserVO {
     public String toString() {
         return "UserVO{" +
                 "id=" + id +
-                ", jobNumber='" + jobNumber + '\'' +
-                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", fullName='" + fullName + '\'' +
                 ", gender=" + gender +
-                ", birthday=" + birthday +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", point=" + point +
+                ", followers=" + followers +
+                ", followings=" + followings +
+                ", shares=" + shares +
+                ", comments=" + comments +
+                ", collections=" + collections +
                 ", available=" + available +
                 '}';
     }
