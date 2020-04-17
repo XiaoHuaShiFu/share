@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.UserMapper">
+    <sql id="Base_Column_List">
+        id, username, password, nick_name, phone, email, avatar_url, gender, followers, followings, shares, comments,
+        collections, available, create_time, update_time
+    </sql>
+
+    <insert id="insertUser" parameterType="top.xiaohuashifu.share.pojo.do0.UserDO" useGeneratedKeys="true" keyProperty="id">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="nickName != null" >
+                nick_name,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="avatarUrl != null" >
+                avatar_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="username != null" >
+                #{username},
+            </if>
+            <if test="password != null" >
+                #{password},
+            </if>
+            <if test="nickName != null" >
+                #{nickName},
+            </if>
+            <if test="gender != null" >
+                #{gender},
+            </if>
+            <if test="phone != null" >
+                #{phone},
+            </if>
+            <if test="email != null" >
+                #{email},
+            </if>
+            <if test="avatarUrl != null" >
+                #{avatarUrl},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getUser" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="getUserByUsername" parameterType="string" resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where username = #{username}
+    </select>
+
+    <select id="listUsers" parameterType="top.xiaohuashifu.share.pojo.query.UserQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="idList != null">
+                id in (
+                    <foreach collection="idList"  item="item" index="index" separator=",">
+                        #{item}
+                    </foreach>
+                )
+            </if>
+            <if test="username != null">
+                and username like "%"#{username}"%"
+            </if>
+            <if test="nickName != null">
+                and nick_name like "%"#{nickName}"%"
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="phone != null">
+                and phone like "%"#{phone}"%"
+            </if>
+            <if test="email != null">
+                and email like "%"#{email}"%"
+            </if>
+            <if test="available != null">
+                and available = #{available}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <update id="updateUser" parameterType="top.xiaohuashifu.share.pojo.do0.UserDO">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="available != null">
+                available = #{available},
+            </if>
+            <if test="avatarUrl != null">
+                avatar_url = #{avatarUrl,},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <select id="countByUsername" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where username = #{username}
+    </select>
+
+    <select id="countByPhone" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where phone = #{phone}
+    </select>
+
+    <select id="countByEmail" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where email = #{email}
+    </select>
+</mapper>

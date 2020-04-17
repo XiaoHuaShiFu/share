@@ -15,11 +15,9 @@ import java.util.List;
  */
 public interface UserService {
 
-    Result<String> getOpenid(Integer userFormId);
+    Result<UserDO> getUserByUsername(String username);
 
-    Result<UserDO> getUserByJobNumber(String jobNumber);
-
-    Result<UserDO> saveUser(UserDO userDO, String code);
+    Result<UserDO> saveUser(UserDO userDO, MultipartFile avatar);
 
     Result<UserDO> getUser(Integer id);
 

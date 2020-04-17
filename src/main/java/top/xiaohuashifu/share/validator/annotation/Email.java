@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 
 /**
  * 描述: 电子邮箱校验
+ * 必须符合正则表达式 ^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$
  *
  * @author xhsf
  * @email 827032783@qq.com

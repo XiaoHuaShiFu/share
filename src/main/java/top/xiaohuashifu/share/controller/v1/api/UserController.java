@@ -20,7 +20,6 @@ import top.xiaohuashifu.share.result.Result;
 import top.xiaohuashifu.share.service.UserService;
 import top.xiaohuashifu.share.validator.annotation.Id;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +47,6 @@ public class UserController {
 
     /**
      * 创建User并返回User
-     * @param code 微信小程序的wx.login()接口返回值
      * @param userDO 用户信息
      * @return UserVO
      *
@@ -56,8 +54,8 @@ public class UserController {
      * HttpStatus.CREATED
      *
      * @errors:
-     * INVALID_PARAMETER: The code is not valid.
-     * OPERATION_CONFLICT: Request was denied due to conflict, the openid already exists.
+     * INVALID_PARAMETER
+     * OPERATION_CONFLICT
      *
      * @bindErrors
      * INVALID_PARAMETER
@@ -69,10 +67,10 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @ErrorHandler
-    public Object post(
-            @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.") String code,
-            @Validated(GroupPost.class) UserDO userDO) {
-        Result<UserDO> result = userService.saveUser(userDO, code);
+    public Object post(@Validated(GroupPost.class) UserDO userDO,
+                       @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
+                               MultipartFile avatar) {
+        Result<UserDO> result = userService.saveUser(userDO, avatar);
         return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
     }
 
@@ -194,7 +192,7 @@ public class UserController {
     @ErrorHandler
     public Object putAvatar(
             TokenAO tokenAO,
-            @NotNull(message = "INVALID_PARAMETER_IS_BLANK: The id must be not blank.") @Id Integer id,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The id must be not null.") @Id Integer id,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.") MultipartFile avatar) {
         if (!tokenAO.getId().equals(id)) {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);

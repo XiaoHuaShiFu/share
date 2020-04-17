@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.xiaohuashifu.share.dao.AdminMapper">
+	<select id="getAdminByUsername" parameterType="string" resultType="top.xiaohuashifu.share.pojo.do0.AdminDO">
+		select *
+		from admin
+		where username = #{username};
+	</select>
+	
+	<insert id="insertAdminLog">
+		insert into admin_log (admin_id, content) values (#{adminLog.adminId}, #{adminLog.content});
+	</insert>
+	
+	<select id="getAnnouncement" resultType="string">
+		select content from announcement limit 1;
+	</select>
+	
+	<insert id="updateAnnouncement" parameterType="string">
+		update announcement set content = #{announcement};
+	</insert>
+</mapper>

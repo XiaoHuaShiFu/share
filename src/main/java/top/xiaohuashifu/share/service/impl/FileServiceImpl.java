@@ -42,6 +42,7 @@ public class FileServiceImpl implements FileService {
             //将file上传到ftp服务器
             success = ftpClientTemplate.uploadFile(directoryPath, bufFile);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Upload file failed.");
         }
         //删除本地缓存文件

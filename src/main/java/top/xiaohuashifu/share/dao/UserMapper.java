@@ -11,7 +11,7 @@ public interface UserMapper {
      * @param user 用户对象
      * @return 保存的数量
      */
-    int saveUser(UserDO user);
+    int insertUser(UserDO user);
 
     /**
      * 获取用户
@@ -22,24 +22,10 @@ public interface UserMapper {
 
     /**
      * 获取用户
-     * @param jobNumber 工号
+     * @param username 用户名
      * @return userDO
      */
-    UserDO getUserByJobNumber(String jobNumber);
-
-    /**
-     * 通过openid获取对应用户
-     * @param openid openid
-     * @return UserDO
-     */
-    UserDO getUserByOpenid(String openid);
-
-    /**
-     * 获取openid对应用户的数量，用于判断此openid的用户是否已经存在数据库力
-     * @param openid openid
-     * @return openid对应用户的数量
-     */
-    int getCountByOpenid(String openid);
+    UserDO getUserByUsername(String username);
 
     /**
      * 获取query过滤参数后的用户列表，包含pageNum，pageSize等过滤参数，
@@ -56,4 +42,24 @@ public interface UserMapper {
      */
     int updateUser(UserDO userDO0);
 
+    /**
+     * 获取该username的用户数量
+     * @param username 用户名
+     * @return 该username的用户数量
+     */
+    int countByUsername(String username);
+
+    /**
+     * 获取该phone的用户数量
+     * @param phone 手机号码
+     * @return 该phone的用户数量
+     */
+    int countByPhone(String phone);
+
+    /**
+     * 获取该email的用户数量
+     * @param email 电子邮箱
+     * @return 该email的用户数量
+     */
+    int countByEmail(String email);
 }

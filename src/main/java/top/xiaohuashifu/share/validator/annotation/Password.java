@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 @Repeatable(Password.List.class)
 public @interface Password {
 
-    String message() default "INVALID_PARAMETER_SIZE: The size of password must be between 6 to 20.";
+    String message() default "INVALID_PARAMETER_SIZE: The size of password must be between 6 to 16.";
 
     Class<?>[] groups() default {};
 

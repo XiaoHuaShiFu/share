@@ -161,7 +161,7 @@ public class TokenServiceImpl implements TokenService {
             tokenAO.setId(admin.getId());
             tokenAO.setType(tokenType);
         } else if (tokenType == TokenType.USER) {
-            Result<UserDO> result = userService.getUserByJobNumber(username);
+            Result<UserDO> result = userService.getUserByUsername(username);
             if (!result.isSuccess()) {
                 return Result.fail(result.getErrorCode(), result.getMessage());
             }

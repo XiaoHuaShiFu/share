@@ -33,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Result<AdminDO> getAdminByJobNumber(String jobNumber) {
-		AdminDO admin = adminMapper.getAdminByJobNumber(jobNumber);
+		AdminDO admin = adminMapper.getAdminByUsername(jobNumber);
 		if (admin == null) {
 			return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The admin for jobNumber: "
 					+ jobNumber + " does not exist.");

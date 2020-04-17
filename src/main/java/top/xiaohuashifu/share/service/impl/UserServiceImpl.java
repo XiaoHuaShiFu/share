@@ -39,37 +39,55 @@ public class UserServiceImpl implements UserService {
         this.fileService = fileService;
     }
 
-    @Override
-    public Result<String> getOpenid(Integer userId) {
-        return null;
-    }
-
     /**
-     * 获取UserDO通过jobNumber
+     * 获取UserDO通过username
      *
-     * @param jobNumber 工号
+     * @param username 用户名
      * @return Result<UserDO>
      */
     @Override
-    public Result<UserDO> getUserByJobNumber(String jobNumber) {
-        UserDO userDO = userMapper.getUserByJobNumber(jobNumber);
+    public Result<UserDO> getUserByUsername(String username) {
+        UserDO userDO = userMapper.getUserByUsername(username);
         if (userDO == null) {
-            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The specified user for jobNumber="
-                    + jobNumber + " does not exist.");
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The specified user for username="
+                    + username + " does not exist.");
         }
         return Result.success(userDO);
     }
 
     /**
      * 保存User
-     * @param code String
      * @param userDO UserDO
      * @return Result<UserDO>
      */
     @Override
-    public Result<UserDO> saveUser(UserDO userDO, String code) {
-        int count = userMapper.saveUser(userDO);
-        //没有插入成功
+    public Result<UserDO> saveUser(UserDO userDO, MultipartFile avatar) {
+        // 判断用户名存不存在
+        int count = userMapper.countByUsername(userDO.getUsername());
+        if (count >= 1) {
+            return Result.fail(ErrorCode.OPERATION_CONFLICT,
+                    "Insert false due to conflict, the username already exists.");
+        }
+
+        // 判断手机号码存不存在
+        count = userMapper.countByPhone(userDO.getPhone());
+        if (count >= 1) {
+            return Result.fail(ErrorCode.OPERATION_CONFLICT,
+                    "Insert false due to conflict, the phone already exists.");
+        }
+
+        // 判断电子邮箱存不存在
+        count = userMapper.countByEmail(userDO.getEmail());
+        if (count >= 1) {
+            return Result.fail(ErrorCode.OPERATION_CONFLICT,
+                    "Insert false due to conflict, the email already exists.");
+        }
+
+        // 保存头像并获取Url
+        String avatarUrl = fileService.saveAndGetUrl(avatar, UserConstant.PREFIX_AVATAR_FILE_DIRECTORY);
+        userDO.setAvatarUrl(avatarUrl);
+        count = userMapper.insertUser(userDO);
+        // 没有插入成功
         if (count < 1) {
             logger.error("Insert user fail.");
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert user fail.");
@@ -120,15 +138,12 @@ public class UserServiceImpl implements UserService {
     public Result<UserDO> updateUser(UserDO userDO) {
         //只给更新某些属性
         UserDO userDO0 = new UserDO();
-        userDO0.setJobNumber(userDO.getJobNumber());
+        userDO0.setUsername(userDO.getUsername());
         userDO0.setPassword(userDO.getPassword());
         userDO0.setNickName(userDO.getNickName());
-        userDO0.setFullName(userDO.getFullName());
         userDO0.setGender(userDO.getGender());
-        userDO0.setBirthday(userDO.getBirthday());
         userDO0.setPhone(userDO.getPhone());
         userDO0.setEmail(userDO.getEmail());
-        userDO0.setPoint(userDO.getPoint());
         userDO0.setAvailable(userDO.getAvailable());
         //所有参数都为空
         if (BeanUtils.allFieldIsNull(userDO0)) {

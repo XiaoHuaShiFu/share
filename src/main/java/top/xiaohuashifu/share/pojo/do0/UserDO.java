@@ -6,6 +6,8 @@ import top.xiaohuashifu.share.pojo.group.GroupPost;
 import top.xiaohuashifu.share.validator.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -17,15 +19,15 @@ import java.util.Date;
  */
 public class UserDO {
 
+    @Null(message = "INVALID_PARAMETER: The id must be null.",
+            groups = {GroupPost.class})
     @Id(groups = {Group.class})
     private Integer id;
 
-    private String openid;
-
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The jobNumber must be not blank.",
+    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The username must be not blank.",
             groups = {GroupPost.class})
-    @JobNumber(groups = {Group.class})
-    private String jobNumber;
+    @Username(groups = {Group.class})
+    private String username;
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The password must be not blank.",
             groups = {GroupPost.class})
@@ -34,59 +36,81 @@ public class UserDO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The nickName must be not blank.",
             groups = {GroupPost.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of nickName must be between 1 to 20.",
-            min = 1, max = 20,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of nickName must be between 4 to 20.",
+            min = 4, max = 20,
             groups = {Group.class})
     private String nickName;
 
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The fullName must be not blank.",
-            groups = {GroupPost.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of fullName must be between 1 to 20.",
-            min = 1, max = 20,
-            groups = {Group.class})
-    private String fullName;
-
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The gender must be not blank.",
+    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The gender must be not null.",
             groups = {GroupPost.class})
     private Gender gender;
 
-    private Date birthday;
-
+    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The phone must be not blank.",
+            groups = {GroupPost.class})
     @Phone(groups = {Group.class})
     private String phone;
 
+    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The email must be not blank.",
+            groups = {GroupPost.class})
     @Email(groups = {Group.class})
     private String email;
 
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The avatarUrl must be not blank.",
+    @Null(message = "INVALID_PARAMETER: The avatarUrl must be null.",
             groups = {GroupPost.class})
     @Url(groups = {Group.class})
     private String avatarUrl;
 
-    private Integer point;
+    @Null(message = "INVALID_PARAMETER: The followers must be null.",
+            groups = {GroupPost.class})
+    private Integer followers;
 
+    @Null(message = "INVALID_PARAMETER: The followings must be null.",
+            groups = {GroupPost.class})
+    private Integer followings;
+
+    @Null(message = "INVALID_PARAMETER: The shares must be null.",
+            groups = {GroupPost.class})
+    private Integer shares;
+
+    @Null(message = "INVALID_PARAMETER: The comments must be null.",
+            groups = {GroupPost.class})
+    private Integer comments;
+
+    @Null(message = "INVALID_PARAMETER: The collections must be null.",
+            groups = {GroupPost.class})
+    private Integer collections;
+
+    @Null(message = "INVALID_PARAMETER: The available must be null.",
+            groups = {GroupPost.class})
     private Boolean available;
 
+    @Null(message = "INVALID_PARAMETER: The createTime must be null.",
+            groups = {GroupPost.class})
     private Date createTime;
 
+    @Null(message = "INVALID_PARAMETER: The updateTime must be null.",
+            groups = {GroupPost.class})
     private Date updateTime;
 
     public UserDO() {
     }
 
-    public UserDO(Integer id, String openid, String jobNumber, String password, String nickName, String fullName, Gender gender, Date birthday, String phone, String email, String avatarUrl, Integer point, Boolean available, Date createTime, Date updateTime) {
+    public UserDO( Integer id, String username, String password, String nickName, Gender gender, String phone,
+                   String email, String avatarUrl, Integer followers, Integer followings, Integer shares,
+                   Integer comments, Integer collections, Boolean available, Date createTime, Date updateTime) {
         this.id = id;
-        this.openid = openid;
-        this.jobNumber = jobNumber;
+        this.username = username;
         this.password = password;
         this.nickName = nickName;
-        this.fullName = fullName;
         this.gender = gender;
-        this.birthday = birthday;
         this.phone = phone;
         this.email = email;
         this.avatarUrl = avatarUrl;
-        this.point = point;
+        this.followers = followers;
+        this.followings = followings;
+        this.shares = shares;
+        this.comments = comments;
+        this.collections = collections;
         this.available = available;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -100,20 +124,12 @@ public class UserDO {
         this.id = id;
     }
 
-    public String getOpenid() {
-        return openid;
+    public String getUsername() {
+        return username;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getJobNumber() {
-        return jobNumber;
-    }
-
-    public void setJobNumber(String jobNumber) {
-        this.jobNumber = jobNumber;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -132,28 +148,12 @@ public class UserDO {
         this.nickName = nickName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public Gender getGender() {
         return gender;
     }
 
     public void setGender(Gender gender) {
         this.gender = gender;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 
     public String getPhone() {
@@ -180,12 +180,44 @@ public class UserDO {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getPoint() {
-        return point;
+    public Integer getFollowers() {
+        return followers;
     }
 
-    public void setPoint(Integer point) {
-        this.point = point;
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
+    }
+
+    public Integer getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Integer followings) {
+        this.followings = followings;
+    }
+
+    public Integer getShares() {
+        return shares;
+    }
+
+    public void setShares(Integer shares) {
+        this.shares = shares;
+    }
+
+    public Integer getComments() {
+        return comments;
+    }
+
+    public void setComments(Integer comments) {
+        this.comments = comments;
+    }
+
+    public Integer getCollections() {
+        return collections;
+    }
+
+    public void setCollections(Integer collections) {
+        this.collections = collections;
     }
 
     public Boolean getAvailable() {
@@ -216,17 +248,18 @@ public class UserDO {
     public String toString() {
         return "UserDO{" +
                 "id=" + id +
-                ", openid='" + openid + '\'' +
-                ", jobNumber='" + jobNumber + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", fullName='" + fullName + '\'' +
                 ", gender=" + gender +
-                ", birthday=" + birthday +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", point=" + point +
+                ", followers=" + followers +
+                ", followings=" + followings +
+                ", shares=" + shares +
+                ", comments=" + comments +
+                ", collections=" + collections +
                 ", available=" + available +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
