@@ -47,4 +47,12 @@ public interface CacheService {
 
     Long expire(String key, int seconds);
 
+    Long sadd(String key, String... member);
+
+    Boolean sismember(String key, String member);
+
+    Long srem(String key, String member);
+
+    Set<String> smembers(String key);
+
 }

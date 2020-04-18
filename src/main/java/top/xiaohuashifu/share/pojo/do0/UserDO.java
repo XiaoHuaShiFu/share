@@ -88,11 +88,11 @@ public class UserDO {
     private Boolean available;
 
     @Null(message = "INVALID_PARAMETER: The createTime must be null.",
-            groups = {GroupPost.class})
+            groups = {GroupPost.class, GroupPut.class})
     private Date createTime;
 
     @Null(message = "INVALID_PARAMETER: The updateTime must be null.",
-            groups = {GroupPost.class})
+            groups = {GroupPost.class, GroupPut.class})
     private Date updateTime;
 
     public UserDO() {

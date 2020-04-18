@@ -6,6 +6,7 @@ import top.xiaohuashifu.share.pojo.group.GroupPost;
 import top.xiaohuashifu.share.pojo.group.GroupPut;
 import top.xiaohuashifu.share.validator.annotation.Id;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Date;
@@ -16,22 +17,18 @@ import java.util.Date;
  * @author xhsf
  * @email 827032783@qq.com
  */
-public class UserFollowerDO {
+public class SensitiveWordDO {
 
     @Null(message = "INVALID_PARAMETER: The id must be null.",
-            groups = {GroupPost.class, GroupDelete.class})
+            groups = {GroupPost.class})
+    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The id must be not null.",
+            groups = {GroupDelete.class})
     @Id(groups = {Group.class})
     private Integer id;
 
-    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The followederId must be not null.",
-            groups = {GroupPost.class, GroupDelete.class})
-    @Id(groups = {Group.class})
-    private Integer followederId;
-
-    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The followerId must be not null.",
-            groups = {GroupPost.class, GroupDelete.class})
-    @Id(groups = {Group.class})
-    private Integer followerId;
+    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The sensitiveWord must be not blank.",
+            groups = {GroupPost.class})
+    private String sensitiveWord;
 
     @Null(message = "INVALID_PARAMETER: The createTime must be null.",
             groups = {GroupPost.class})
@@ -41,13 +38,12 @@ public class UserFollowerDO {
             groups = {GroupPost.class})
     private Date updateTime;
 
-    public UserFollowerDO() {
+    public SensitiveWordDO() {
     }
 
-    public UserFollowerDO(Integer id, Integer followederId, Integer followerId, Date createTime, Date updateTime) {
+    public SensitiveWordDO(Integer id, String sensitiveWord, Date createTime, Date updateTime) {
         this.id = id;
-        this.followederId = followederId;
-        this.followerId = followerId;
+        this.sensitiveWord = sensitiveWord;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -60,20 +56,12 @@ public class UserFollowerDO {
         this.id = id;
     }
 
-    public Integer getFollowederId() {
-        return followederId;
+    public String getSensitiveWord() {
+        return sensitiveWord;
     }
 
-    public void setFollowederId(Integer followederId) {
-        this.followederId = followederId;
-    }
-
-    public Integer getFollowerId() {
-        return followerId;
-    }
-
-    public void setFollowerId(Integer followerId) {
-        this.followerId = followerId;
+    public void setSensitiveWord(String sensitiveWord) {
+        this.sensitiveWord = sensitiveWord;
     }
 
     public Date getCreateTime() {
@@ -94,10 +82,9 @@ public class UserFollowerDO {
 
     @Override
     public String toString() {
-        return "UserFollowerDO{" +
+        return "SensitiveWordDO{" +
                 "id=" + id +
-                ", followederId=" + followederId +
-                ", followerId=" + followerId +
+                ", sensitiveWord='" + sensitiveWord + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

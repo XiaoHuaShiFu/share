@@ -263,7 +263,7 @@ public class CacheServiceRedisImpl implements CacheService {
     /**
      * 设置过期时间
      *
-     * @param key     key
+     * @param key key
      * @param seconds seconds
      * @return 影响行数
      */
@@ -275,4 +275,58 @@ public class CacheServiceRedisImpl implements CacheService {
         return rowCount;
     }
 
+    /**
+     * 添加set
+     * @param key key
+     * @param member member
+     * @return 影响行数
+     */
+    @Override
+    public Long sadd(String key, String... member) {
+        Jedis jedis = jedisPool.getResource();
+        Long rowCount = jedis.sadd(key, member);
+        jedis.close();
+        return rowCount;
+    }
+
+    /**
+     * 判断成员元素是否是集合的成员。是返回1，否返回0
+     * @param key key
+     * @param member member
+     * @return 1 or 0
+     */
+    @Override
+    public Boolean sismember(String key, String member) {
+        Jedis jedis = jedisPool.getResource();
+        Boolean isMember = jedis.sismember(key, member);
+        jedis.close();
+        return isMember;
+    }
+
+    /**
+     * 删除集合中的元素。
+     * @param key key
+     * @param member member
+     * @return 影响行数
+     */
+    @Override
+    public Long srem(String key, String member) {
+        Jedis jedis = jedisPool.getResource();
+        Long rowCount = jedis.srem(key, member);
+        jedis.close();
+        return rowCount;
+    }
+
+    /**
+     * 获取集合所有元素，且返回结果是无序的
+     * @param key key
+     * @return 集合所有元素
+     */
+    @Override
+    public Set<String> smembers(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Set<String> set = jedis.smembers(key);
+        jedis.close();
+        return set;
+    }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.SensitiveWordMapper">
+    <sql id="BaseColumnList">
+        id, sensitive_word, create_time, update_time
+    </sql>
+
+    <insert id="insertSensitiveWord" parameterType="top.xiaohuashifu.share.pojo.do0.SensitiveWordDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into sensitive_word(sensitive_word)
+        values(#{sensitiveWord})
+    </insert>
+
+    <delete id="deleteSensitiveWord" parameterType="integer">
+        delete from sensitive_word
+        where id = #{id}
+    </delete>
+
+    <select id="getSensitiveWord" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.SensitiveWordDO">
+        select
+        <include refid="BaseColumnList"/>
+        from sensitive_word
+        where id = #{id}
+    </select>
+
+    <select id="listSensitiveWords" parameterType="top.xiaohuashifu.share.pojo.query.SensitiveWordQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.SensitiveWordDO">
+        select
+        <include refid="BaseColumnList"/>
+        from sensitive_word
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="idList != null">
+                id in (
+                    <foreach collection="idList"  item="item" index="index" separator=",">
+                        #{item}
+                    </foreach>
+                )
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <select id="countBySensitiveWord" parameterType="string" resultType="integer">
+        select count(*)
+        from sensitive_word
+        where sensitive_word = #{sensitiveWord}
+    </select>
+
+</mapper>
