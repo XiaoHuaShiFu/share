@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.UserFollowerMapper">
+    <sql id="BaseColumnList">
+        id, followeder_id, follower_id, create_time, update_time
+    </sql>
+
+    <insert id="insertUserFollower" parameterType="top.xiaohuashifu.share.pojo.do0.UserFollowerDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into user_follower(followeder_id, follower_id)
+        values(#{followederId}, #{followerId})
+    </insert>
+
+    <delete id="deleteUserFollowerByFollowederIdAndFollowerId" parameterType="map">
+        delete from user_follower
+        where followeder_id = #{followederId} and follower_id = #{followerId}
+    </delete>
+
+    <select id="getUserFollower" resultType="top.xiaohuashifu.share.pojo.do0.UserFollowerDO" parameterType="integer">
+        select
+        <include refid="BaseColumnList"/>
+        from user_follower
+        where id = #{id}
+    </select>
+
+    <select id="countByFollowederIdAndFollowerId" parameterType="map" resultType="integer">
+        select count(*)
+        from user_follower
+        where followeder_id = #{followederId} and follower_id = #{followerId}
+    </select>
+</mapper>

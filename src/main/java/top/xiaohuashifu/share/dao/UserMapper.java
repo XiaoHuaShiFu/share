@@ -1,4 +1,5 @@
 package top.xiaohuashifu.share.dao;
+import org.apache.ibatis.annotations.Param;
 import top.xiaohuashifu.share.pojo.do0.UserDO;
 import top.xiaohuashifu.share.pojo.query.UserQuery;
 
@@ -36,13 +37,6 @@ public interface UserMapper {
     List<UserDO> listUsers(UserQuery query);
 
     /**
-     * 更新用户信息
-     * @param userDO0 要更新的用户信息
-     * @return 成功更新的条数
-     */
-    int updateUser(UserDO userDO0);
-
-    /**
      * 获取该username的用户数量
      * @param username 用户名
      * @return 该username的用户数量
@@ -62,4 +56,27 @@ public interface UserMapper {
      * @return 该email的用户数量
      */
     int countByEmail(String email);
+
+    /**
+     * 更新用户信息
+     * @param userDO0 要更新的用户信息
+     * @return 成功更新的条数
+     */
+    int updateUser(UserDO userDO0);
+
+    /**
+     * 使得列值自增1
+     * @param id 用户id
+     * @param columnName 列名
+     * @return 更新列数
+     */
+    int increase(@Param("id") Integer id, @Param("columnName") String columnName);
+
+    /**
+     * 使得列值自减1
+     * @param id 用户id
+     * @param columnName 列名
+     * @return 更新列数
+     */
+    int decrease(@Param("id") Integer id, @Param("columnName") String columnName);
 }

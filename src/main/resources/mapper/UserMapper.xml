@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="top.xiaohuashifu.share.dao.UserMapper">
-    <sql id="Base_Column_List">
+    <sql id="BaseColumnList">
         id, username, password, nick_name, phone, email, avatar_url, gender, followers, followings, shares, comments,
         collections, available, create_time, update_time
     </sql>
@@ -58,14 +58,14 @@
 
     <select id="getUser" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="BaseColumnList"/>
         from user
         where id = #{id}
     </select>
 
     <select id="getUserByUsername" parameterType="string" resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="BaseColumnList"/>
         from user
         where username = #{username}
     </select>
@@ -73,7 +73,7 @@
     <select id="listUsers" parameterType="top.xiaohuashifu.share.pojo.query.UserQuery"
             resultType="top.xiaohuashifu.share.pojo.do0.UserDO">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="BaseColumnList"/>
         from user
         <where>
             <if test="id != null">
@@ -105,6 +105,24 @@
         order by update_time desc
     </select>
 
+    <select id="countByUsername" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where username = #{username}
+    </select>
+
+    <select id="countByPhone" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where phone = #{phone}
+    </select>
+
+    <select id="countByEmail" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where email = #{email}
+    </select>
+
     <update id="updateUser" parameterType="top.xiaohuashifu.share.pojo.do0.UserDO">
         update user
         <set>
@@ -127,27 +145,53 @@
                 available = #{available},
             </if>
             <if test="avatarUrl != null">
-                avatar_url = #{avatarUrl,},
+                avatar_url = #{avatarUrl},
             </if>
         </set>
-        where id = #{id, jdbcType=INTEGER}
+        where id = #{id}
     </update>
 
-    <select id="countByUsername" resultType="java.lang.Integer">
-        select count(*)
-        from user
-        where username = #{username}
-    </select>
+    <update id="increase" parameterType="map">
+        update user
+        <set>
+            <if test="columnName == 'followers'">
+                followers = followers + 1,
+            </if>
+            <if test="columnName == 'followings'">
+                followings = followings + 1,
+            </if>
+            <if test="columnName == 'shares'">
+                shares = shares + 1,
+            </if>
+            <if test="columnName == 'comments'">
+                comments = comments + 1,
+            </if>
+            <if test="columnName == 'collections'">
+                collections = collections + 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
-    <select id="countByPhone" resultType="java.lang.Integer">
-        select count(*)
-        from user
-        where phone = #{phone}
-    </select>
-
-    <select id="countByEmail" resultType="java.lang.Integer">
-        select count(*)
-        from user
-        where email = #{email}
-    </select>
+    <update id="decrease" parameterType="map">
+        update user
+        <set>
+            <if test="columnName == 'followers'">
+                followers = followers - 1,
+            </if>
+            <if test="columnName == 'followings'">
+                followings = followings - 1,
+            </if>
+            <if test="columnName == 'shares'">
+                shares = shares - 1,
+            </if>
+            <if test="columnName == 'comments'">
+                comments = comments - 1,
+            </if>
+            <if test="columnName == 'collections'">
+                collections = collections - 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

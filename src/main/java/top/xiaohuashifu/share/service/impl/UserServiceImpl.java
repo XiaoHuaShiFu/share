@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import top.xiaohuashifu.share.constant.Operator;
 import top.xiaohuashifu.share.dao.UserMapper;
 import top.xiaohuashifu.share.pojo.do0.UserDO;
 import top.xiaohuashifu.share.pojo.query.UserQuery;
@@ -165,6 +166,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return getUser(userDO0.getId());
+    }
+
+    /**
+     * 使得对应属性的值+1
+     * @param id 用户编号
+     * @param parameterName 属性名
+     * @param operator 自增或自减
+     * @return UserDO
+     */
+    @Override
+    public Result<UserDO> updateUser(Integer id, String parameterName, Operator operator) {
+        if (operator == Operator.INCREMENT) {
+            userMapper.increase(id, parameterName);
+        } else if (operator == Operator.DECREMENT) {
+            userMapper.decrease(id, parameterName);
+        }
+        return getUser(id);
     }
 
     /**
