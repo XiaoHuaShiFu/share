@@ -76,7 +76,7 @@ public class SensitiveWordController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    @TokenAuth(tokenType = {TokenType.ADMIN})
+//    @TokenAuth(tokenType = {TokenType.ADMIN})
     @ErrorHandler
     public Object get(SensitiveWordQuery query) {
         Result<PageInfo<SensitiveWordDO>> result = sensitiveWordService.listSensitiveWords(query);
