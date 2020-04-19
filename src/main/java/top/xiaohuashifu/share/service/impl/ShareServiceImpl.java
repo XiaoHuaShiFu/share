@@ -12,9 +12,10 @@ import top.xiaohuashifu.share.pojo.do0.ShareDO;
 import top.xiaohuashifu.share.pojo.query.ShareQuery;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
-import top.xiaohuashifu.share.service.FileService;
 import top.xiaohuashifu.share.service.SensitiveWordService;
 import top.xiaohuashifu.share.service.ShareService;
+import top.xiaohuashifu.share.service.UserService;
+import top.xiaohuashifu.share.service.constant.UserConstant;
 import top.xiaohuashifu.share.util.BeanUtils;
 
 import java.util.Date;
@@ -32,15 +33,16 @@ public class ShareServiceImpl implements ShareService {
 
     private final ShareMapper shareMapper;
 
-    private final FileService fileService;
-
     private final SensitiveWordService sensitiveWordService;
 
+    private final UserService userService;
+
     @Autowired
-    public ShareServiceImpl(ShareMapper shareMapper, FileService fileService, SensitiveWordService sensitiveWordService) {
+    public ShareServiceImpl(ShareMapper shareMapper, SensitiveWordService sensitiveWordService,
+                            UserService userService) {
         this.shareMapper = shareMapper;
-        this.fileService = fileService;
         this.sensitiveWordService = sensitiveWordService;
+        this.userService = userService;
     }
 
     /**
@@ -64,6 +66,9 @@ public class ShareServiceImpl implements ShareService {
             logger.error("Insert share fail.");
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert share fail.");
         }
+
+        // 用户的分享数+1
+        userService.updateUser(shareDO.getUserId(), UserConstant.COLUMN_NAME_OF_SHARES, Operator.INCREMENT);
 
         return getShare(shareDO.getId());
     }

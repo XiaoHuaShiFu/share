@@ -13,7 +13,7 @@ public interface UserFollowerService {
 
     Result<UserFollowerDO> saveUserFollower(UserFollowerDO userFollowerDO);
 
-    Result<String> deleteUserFollower(Integer followederId, Integer followerId);
+    Result deleteUserFollower(Integer followederId, Integer followerId);
 
     Result<UserFollowerDO> getUserFollower(Integer id);
 

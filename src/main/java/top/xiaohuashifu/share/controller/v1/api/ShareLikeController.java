@@ -12,39 +12,39 @@ import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
 import top.xiaohuashifu.share.constant.TokenType;
 import top.xiaohuashifu.share.pojo.ao.TokenAO;
-import top.xiaohuashifu.share.pojo.do0.UserFollowerDO;
+import top.xiaohuashifu.share.pojo.do0.ShareLikeDO;
 import top.xiaohuashifu.share.pojo.group.GroupDelete;
 import top.xiaohuashifu.share.pojo.group.GroupPost;
-import top.xiaohuashifu.share.pojo.vo.UserFollowerVO;
+import top.xiaohuashifu.share.pojo.vo.ShareLikeVO;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
-import top.xiaohuashifu.share.service.UserFollowerService;
+import top.xiaohuashifu.share.service.ShareLikeService;
 
 /**
- * 描述: 用户关注模块
+ * 描述: 分享点赞模块
  *
  * @author xhsf
  * @email 827032783@qq.com
  */
 @RestController
-@RequestMapping("v1/users/followers")
+@RequestMapping("v1/shares/likes")
 @Validated
-public class UserFollowerController {
+public class ShareLikeController {
 
     private final Mapper mapper;
 
-    private final UserFollowerService userFollowerService;
+    private final ShareLikeService shareLikeService;
 
     @Autowired
-    public UserFollowerController(Mapper mapper, UserFollowerService userFollowerService) {
+    public ShareLikeController(Mapper mapper, ShareLikeService shareLikeService) {
         this.mapper = mapper;
-        this.userFollowerService = userFollowerService;
+        this.shareLikeService = shareLikeService;
     }
 
     /**
-     * 创建userFollowerDO并返回userFollowerDO
-     * @param userFollowerDO 用户粉丝信息
-     * @return UserFollowerDO
+     * 创建ShareLikeDO并返回ShareLikeDO
+     * @param shareLikeDO 分享点赞信息
+     * @return ShareLikeDO
      *
      * @success:
      * HttpStatus.CREATED
@@ -63,19 +63,19 @@ public class UserFollowerController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = {TokenType.USER})
     @ErrorHandler
-    public Object post(TokenAO tokenAO, @Validated(GroupPost.class) UserFollowerDO userFollowerDO) {
-        // 不能越权关注
-        if (!tokenAO.getId().equals(userFollowerDO.getFollowerId())) {
+    public Object post(TokenAO tokenAO, @Validated(GroupPost.class) ShareLikeDO shareLikeDO) {
+        // 不能越权
+        if (!tokenAO.getId().equals(shareLikeDO.getUserId())) {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
 
-        Result<UserFollowerDO> result = userFollowerService.saveUserFollower(userFollowerDO);
-        return !result.isSuccess() ? result : mapper.map(result.getData(), UserFollowerVO.class);
+        Result<ShareLikeDO> result = shareLikeService.saveShareLike(shareLikeDO);
+        return !result.isSuccess() ? result : mapper.map(result.getData(), ShareLikeVO.class);
     }
 
     /**
-     * 删除UserFollower
-     * @param userFollowerDO 用户粉丝信息
+     * 删除ShareLike
+     * @param shareLikeDO 分享点赞信息
      * @return 提示信息
      *
      * @success:
@@ -93,14 +93,13 @@ public class UserFollowerController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @TokenAuth(tokenType = {TokenType.USER})
     @ErrorHandler
-    public Object delete(TokenAO tokenAO, @Validated(GroupDelete.class) UserFollowerDO userFollowerDO) {
-        // 不能越权取关
-        if (!tokenAO.getId().equals(userFollowerDO.getFollowerId())) {
+    public Object delete(TokenAO tokenAO, @Validated(GroupDelete.class) ShareLikeDO shareLikeDO) {
+        // 不能越权
+        if (!tokenAO.getId().equals(shareLikeDO.getUserId())) {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
 
-        Result result = userFollowerService.deleteUserFollower(
-                userFollowerDO.getFollowederId(), userFollowerDO.getFollowerId());
+        Result result = shareLikeService.deleteShareLike(shareLikeDO.getUserId(), shareLikeDO.getShareId());
         return !result.isSuccess() ? result : result.getMessage();
     }
 

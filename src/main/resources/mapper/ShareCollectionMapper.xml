@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.ShareCollectionMapper">
+    <sql id="BaseColumnList">
+        id, user_id, share_id, create_time, update_time
+    </sql>
+
+    <insert id="insertShareCollection" parameterType="top.xiaohuashifu.share.pojo.do0.ShareCollectionDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into share_collection(user_id, share_id)
+        values(#{userId}, #{shareId})
+    </insert>
+
+    <delete id="deleteShareCollectionByUserIdAndShareId" parameterType="map">
+        delete from share_collection
+        where user_id = #{userId} and share_id = #{shareId}
+    </delete>
+
+    <select id="getShareCollection" resultType="top.xiaohuashifu.share.pojo.do0.ShareCollectionDO" parameterType="integer">
+        select
+        <include refid="BaseColumnList"/>
+        from share_collection
+        where id = #{id}
+    </select>
+
+    <select id="listShareCollections" parameterType="top.xiaohuashifu.share.pojo.query.ShareCollectionQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.ShareCollectionDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_collection
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="idList != null">
+                id in (
+                <foreach collection="idList"  item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <select id="countByUserIdAndShareId" parameterType="map" resultType="integer">
+        select count(*)
+        from share_collection
+        where user_id = #{userId} and share_id = #{shareId}
+    </select>
+</mapper>

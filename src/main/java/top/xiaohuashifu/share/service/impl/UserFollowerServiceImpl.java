@@ -83,10 +83,10 @@ public class UserFollowerServiceImpl implements UserFollowerService {
      * 删除UserFollower
      * @param followederId 被关注者id
      * @param followerId 关注者id
-     * @return 被删除的UserFollower
+     * @return 提示信息
      */
     @Override
-    public Result<String> deleteUserFollower(Integer followederId, Integer followerId) {
+    public Result deleteUserFollower(Integer followederId, Integer followerId) {
         // 判断用户粉丝记录是否已经存在了（是否已经关注了）
         int count = userFollowerMapper.countByFollowederIdAndFollowerId(followederId, followerId);
         if (count < 1) {
