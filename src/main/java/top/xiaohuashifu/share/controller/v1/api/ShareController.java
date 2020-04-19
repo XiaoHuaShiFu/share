@@ -1,14 +1,15 @@
 package top.xiaohuashifu.share.controller.v1.api;
 
 import com.github.pagehelper.PageInfo;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
 import top.xiaohuashifu.share.constant.TokenType;
+import top.xiaohuashifu.share.manager.ShareManager;
 import top.xiaohuashifu.share.pojo.ao.TokenAO;
 import top.xiaohuashifu.share.pojo.do0.ShareDO;
 import top.xiaohuashifu.share.pojo.group.Group;
@@ -17,8 +18,10 @@ import top.xiaohuashifu.share.pojo.query.ShareQuery;
 import top.xiaohuashifu.share.pojo.vo.ShareVO;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
-import top.xiaohuashifu.share.service.ShareService;
 import top.xiaohuashifu.share.validator.annotation.Id;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 描述: 分享模块
@@ -31,14 +34,11 @@ import top.xiaohuashifu.share.validator.annotation.Id;
 @Validated
 public class ShareController {
 
-    private final Mapper mapper;
-
-    private final ShareService shareService;
+    private final ShareManager shareManager;
 
     @Autowired
-    public ShareController(Mapper mapper, ShareService shareService) {
-        this.mapper = mapper;
-        this.shareService = shareService;
+    public ShareController(ShareManager shareManager) {
+        this.shareManager = shareManager;
     }
 
     /**
@@ -64,14 +64,16 @@ public class ShareController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.USER)
     @ErrorHandler
-    public Object post(TokenAO tokenAO, @Validated(GroupPost.class) ShareDO shareDO) {
+    public Object post(TokenAO tokenAO, @Validated(GroupPost.class) ShareDO shareDO,
+                       @NotNull(message = "INVALID_PARAMETER_IS_NULL: At least one of image.")
+                               List<MultipartFile> imageList) {
         // 越权新建分享
         if (!tokenAO.getId().equals(shareDO.getUserId())) {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
 
-        Result<ShareDO> result = shareService.saveShare(shareDO);
-        return !result.isSuccess() ? result : mapper.map(result.getData(), ShareVO.class);
+        Result<ShareVO> result = shareManager.saveShare(shareDO, imageList);
+        return !result.isSuccess() ? result : result.getData();
     }
 
     /**
@@ -92,8 +94,8 @@ public class ShareController {
     @ResponseStatus(value = HttpStatus.OK)
     @ErrorHandler
     public Object get(@PathVariable @Id Integer id) {
-        Result<ShareDO> result = shareService.getShare(id);
-        return !result.isSuccess() ? result : mapper.map(result.getData(), ShareVO.class);
+        Result<ShareVO> result = shareManager.getShare(id);
+        return !result.isSuccess() ? result : result.getData();
     }
 
     /**
@@ -108,7 +110,7 @@ public class ShareController {
     @ResponseStatus(value = HttpStatus.OK)
     @ErrorHandler
     public Object get(ShareQuery query) {
-        Result<PageInfo<ShareDO>> result = shareService.listShares(query);
+        Result<PageInfo<ShareVO>> result = shareManager.listShares(query);
         return !result.isSuccess() ? result : result.getData();
     }
 
@@ -140,13 +142,13 @@ public class ShareController {
     public Object put(TokenAO tokenAO, @Validated(Group.class) ShareDO shareDO) {
         // 管理员
         if (tokenAO.getType() == TokenType.ADMIN) {
-            Result<ShareDO> result = shareService.updateShare(shareDO);
-            return result.isSuccess() ? mapper.map(result.getData(), ShareVO.class) : result;
+            Result<ShareVO> result = shareManager.updateShare(shareDO);
+            return result.isSuccess() ? result.getData() : result;
         }
         // 用户本人
         else if (shareDO.getUserId().equals(tokenAO.getId())) {
-            Result<ShareDO> result = shareService.updateShare(shareDO);
-            return result.isSuccess() ? mapper.map(result.getData(), ShareVO.class) : result;
+            Result<ShareVO> result = shareManager.updateShare(shareDO);
+            return result.isSuccess() ? result.getData() : result;
         }
 
         // 非法权限token

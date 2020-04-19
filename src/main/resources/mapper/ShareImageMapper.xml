@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.ShareImageMapper">
+    <sql id="BaseColumnList">
+        id, share_id, image_url, image_index, create_time, update_time
+    </sql>
+
+    <insert id="insertShareImage" parameterType="top.xiaohuashifu.share.pojo.do0.ShareImageDO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into share_image(share_id, image_url, image_index)
+        values(#{shareId}, #{imageUrl}, #{imageIndex})
+    </insert>
+
+    <select id="getShareImage" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.ShareImageDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_image
+        where id = #{id}
+    </select>
+
+    <select id="listShareImages" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.ShareImageDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_image
+        where share_id = #{shareId}
+        order by image_index
+    </select>
+
+</mapper>
