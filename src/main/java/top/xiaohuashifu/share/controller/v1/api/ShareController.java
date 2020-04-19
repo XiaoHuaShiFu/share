@@ -1,28 +1,24 @@
 package top.xiaohuashifu.share.controller.v1.api;
 
+import com.github.pagehelper.PageInfo;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
 import top.xiaohuashifu.share.constant.TokenType;
 import top.xiaohuashifu.share.pojo.ao.TokenAO;
-import top.xiaohuashifu.share.pojo.do0.UserDO;
+import top.xiaohuashifu.share.pojo.do0.ShareDO;
 import top.xiaohuashifu.share.pojo.group.Group;
 import top.xiaohuashifu.share.pojo.group.GroupPost;
-import top.xiaohuashifu.share.pojo.query.UserQuery;
-import top.xiaohuashifu.share.pojo.vo.UserVO;
+import top.xiaohuashifu.share.pojo.query.ShareQuery;
+import top.xiaohuashifu.share.pojo.vo.ShareVO;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
-import top.xiaohuashifu.share.service.UserService;
+import top.xiaohuashifu.share.service.ShareService;
 import top.xiaohuashifu.share.validator.annotation.Id;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 描述: 分享模块
@@ -37,26 +33,25 @@ public class ShareController {
 
     private final Mapper mapper;
 
-    private final UserService userService;
+    private final ShareService shareService;
 
     @Autowired
-    public ShareController(Mapper mapper, UserService userService) {
+    public ShareController(Mapper mapper, ShareService shareService) {
         this.mapper = mapper;
-        this.userService = userService;
+        this.shareService = shareService;
     }
 
     /**
-     * 创建User并返回User
-     * @param userDO 用户信息
-     * @param avatar 头像
-     * @return UserVO
+     * 创建Share并返回Share
+     * @param shareDO 分享信息
+     * @return ShareVO
      *
      * @success:
      * HttpStatus.CREATED
      *
      * @errors:
      * INVALID_PARAMETER
-     * OPERATION_CONFLICT
+     * FORBIDDEN_SUB_USER
      *
      * @bindErrors
      * INVALID_PARAMETER
@@ -67,21 +62,22 @@ public class ShareController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @TokenAuth(tokenType = TokenType.USER)
     @ErrorHandler
-    public Object post(@Validated(GroupPost.class) UserDO userDO,
-                       @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
-                               MultipartFile avatar) {
-        Result<UserDO> result = userService.saveUser(userDO, avatar);
-        return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
+    public Object post(TokenAO tokenAO, @Validated(GroupPost.class) ShareDO shareDO) {
+        // 越权新建分享
+        if (!tokenAO.getId().equals(shareDO.getUserId())) {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        }
+
+        Result<ShareDO> result = shareService.saveShare(shareDO);
+        return !result.isSuccess() ? result : mapper.map(result.getData(), ShareVO.class);
     }
 
-    // TODO: 这里在不同权限下应该返回不同的数据,
-    //  ADMIN返回的信息应该多过USER
     /**
-     * 获取user
-     * @param tokenAO TokenAO
-     * @param id 用户编号
-     * @return UserVO
+     * 获取分享
+     * @param id 分享编号
+     * @return ShareVO
      *
      * @success:
      * HttpStatus.OK
@@ -94,53 +90,33 @@ public class ShareController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
     @ErrorHandler
-    public Object get(TokenAO tokenAO, @PathVariable @Id Integer id) {
-        TokenType type = tokenAO.getType();
-
-        if (type == TokenType.USER) {
-            Result<UserDO> result = userService.getUser(id);
-            return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
-        }
-        if (type == TokenType.ADMIN) {
-            Result<UserDO> result = userService.getUser(id);
-            return !result.isSuccess() ? result : mapper.map(result.getData(), UserVO.class);
-        }
-
-        // 非法权限token
-        return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+    public Object get(@PathVariable @Id Integer id) {
+        Result<ShareDO> result = shareService.getShare(id);
+        return !result.isSuccess() ? result : mapper.map(result.getData(), ShareVO.class);
     }
 
     /**
-     * 查询user
+     * 查询share
      * @param query 查询参数
-     * @return UserVOList
+     * @return PageInfo<ShareVO>
      *
      * @success:
      * HttpStatus.OK
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
     @ErrorHandler
-    public Object get(UserQuery query) {
-        Result<List<UserDO>> result = userService.listUsers(query);
-        if (!result.isSuccess()) {
-            return result;
-        }
-
-        return result.getData().stream()
-                .map(userDO -> mapper.map(userDO, UserVO.class))
-                .collect(Collectors.toList());
+    public Object get(ShareQuery query) {
+        Result<PageInfo<ShareDO>> result = shareService.listShares(query);
+        return !result.isSuccess() ? result : result.getData();
     }
 
     /**
-     * 更新User并返回User
+     * 更新Share并返回Share
      * @param tokenAO TokenAO
-     * @param userDO User信息
-     * @param avatar 要更新的头像
-     * @return UserVO
+     * @param shareDO Share信息
+     * @return ShareVO
      *
      * @success:
      * HttpStatus.OK
@@ -161,16 +137,16 @@ public class ShareController {
     // TODO: 2020/3/31 ADMIN可以控制修改一些信息，USER可以修改一些信息
     @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
     @ErrorHandler
-    public Object put(TokenAO tokenAO, @Validated(Group.class) UserDO userDO, MultipartFile avatar) {
+    public Object put(TokenAO tokenAO, @Validated(Group.class) ShareDO shareDO) {
         // 管理员
         if (tokenAO.getType() == TokenType.ADMIN) {
-            Result<UserDO> result = userService.updateUser(userDO, avatar);
-            return result.isSuccess() ? mapper.map(result.getData(), UserVO.class) : result;
+            Result<ShareDO> result = shareService.updateShare(shareDO);
+            return result.isSuccess() ? mapper.map(result.getData(), ShareVO.class) : result;
         }
         // 用户本人
-        else if (userDO.getId().equals(tokenAO.getId())) {
-            Result<UserDO> result = userService.updateUser(userDO, avatar);
-            return result.isSuccess() ? mapper.map(result.getData(), UserVO.class) : result;
+        else if (shareDO.getUserId().equals(tokenAO.getId())) {
+            Result<ShareDO> result = shareService.updateShare(shareDO);
+            return result.isSuccess() ? mapper.map(result.getData(), ShareVO.class) : result;
         }
 
         // 非法权限token

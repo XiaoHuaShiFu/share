@@ -112,7 +112,7 @@ public class SensitiveWordController {
     @ErrorHandler
     public Object delete(@PathVariable @Id Integer id) {
         Result<String> result = sensitiveWordService.deleteSensitiveWord(id);
-        return !result.isSuccess() ? result : result.getData();
+        return !result.isSuccess() ? result : result.getMessage();
     }
 
     /**

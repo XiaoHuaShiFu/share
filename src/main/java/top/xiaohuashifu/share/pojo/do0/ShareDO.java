@@ -8,6 +8,7 @@ import top.xiaohuashifu.share.validator.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -23,11 +24,13 @@ public class ShareDO {
     @Id(groups = {Group.class})
     private Integer id;
 
+    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The userId must be not null.", groups = {GroupPost.class})
     @Id(groups = {Group.class})
     private Integer userId;
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The content must be not blank.", groups = {GroupPost.class})
-    @Username(groups = {Group.class})
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of content must not be greater 300.", max = 300,
+            groups = {Group.class})
     private String content;
 
     @Null(message = "INVALID_PARAMETER: The views must be null.", groups = {GroupPost.class})
@@ -42,7 +45,7 @@ public class ShareDO {
     @Null(message = "INVALID_PARAMETER: The likes must be null.", groups = {GroupPost.class})
     private Integer likes;
 
-    @Null(message = "INVALID_PARAMETER: The open must be null.", groups = {GroupPost.class})
+    @NotNull(message = "INVALID_PARAMETER: The open must not be null.", groups = {GroupPost.class})
     private Boolean open;
 
     @Null(message = "INVALID_PARAMETER: The shareTime must be null.", groups = {GroupPost.class, GroupPut.class})

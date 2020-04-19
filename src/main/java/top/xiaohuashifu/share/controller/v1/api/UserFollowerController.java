@@ -101,7 +101,7 @@ public class UserFollowerController {
 
         Result<String> result = userFollowerService.deleteUserFollower(
                 userFollowerDO.getFollowederId(), userFollowerDO.getFollowerId());
-        return !result.isSuccess() ? result : result.getData();
+        return !result.isSuccess() ? result : result.getMessage();
     }
 
 }

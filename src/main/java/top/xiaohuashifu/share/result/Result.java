@@ -45,6 +45,11 @@ public class Result<T> implements Serializable {
         this.errorCode = errorCode;
     }
 
+    private Result(Boolean success, String message) {
+        this(success);
+        this.message = message;
+    }
+
     private Result(Boolean success, ErrorCode errorCode, String message) {
         this(success);
         this.errorCode = errorCode;
@@ -68,6 +73,17 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> success(T data) {
         return new Result<>(true, data);
+    }
+
+    /**
+     * 成功调用时的构造方法
+     *
+     * @param format 格式化字符串
+     * @param args 参数
+     * @return Result<T>
+     */
+    public static <T> Result<T> success(String format, Object... args) {
+        return new Result<>(true, MessageFormat.format(format, args));
     }
 
     /**

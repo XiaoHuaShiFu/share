@@ -106,8 +106,8 @@ public class UserFollowerServiceImpl implements UserFollowerService {
         // 关注者关注数-1
         userService.updateUser(followerId, UserConstant.COLUMN_NAME_OF_FOLLOWINGS, Operator.DECREMENT);
 
-        return Result.success("Delete userFollower success. The followederId=" + followederId +
-                " and followerId=" + followerId + ".");
+        return Result.success("Delete userFollower success. The followederId={0} and followerId={1}.",
+                followederId, followerId);
     }
 
     /**

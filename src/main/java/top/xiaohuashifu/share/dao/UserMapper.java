@@ -59,10 +59,10 @@ public interface UserMapper {
 
     /**
      * 更新用户信息
-     * @param userDO0 要更新的用户信息
+     * @param userDO 要更新的用户信息
      * @return 成功更新的条数
      */
-    int updateUser(UserDO userDO0);
+    int updateUser(UserDO userDO);
 
     /**
      * 使得列值自增1

@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
         userDO0.setId(userDO.getId());
         int count = userMapper.updateUser(userDO0);
         if (count < 1) {
-            logger.error("Update avatar failed. userId: {}", userDO0.getId());
+            logger.error("Update user failed. id: {}", userDO0.getId());
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Update user failed.");
         }
 

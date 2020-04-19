@@ -57,25 +57,28 @@
     </ol>
 </div>
 
+
 <div id="app8">
-    {{ info }}
+    <ol>
+        <todo-item
+                v-for="sensitiveWord in sensitiveWords"
+                v-bind:todo="sensitiveWord"
+                v-bind:key="sensitiveWord.id"
+        ></todo-item>
+    </ol>
 </div>
 <script type="text/javascript">
-    new Vue({
+    var app8 = new Vue({
         el: '#app8',
-        data () {
-            return {
-                info: null
-            }
+        data: {
+            sensitiveWords: []
         },
         created(){
-            axios.get('http://localhost/v1/sensitive_words',{
-                params:{
-                    title:'眼镜'
-                }
-            }).then(function(res){
-                console.log(res)
-            }).catch(function (error) {
+            let self = this;
+            axios.get('http://localhost/v1/sensitive_words').then(res=>{
+                self.$set(self, 'sensitiveWords', res.data.list);
+                console.log(res.data.list)
+            }).catch(error=>{
                 console.log(error);
             });
         }
@@ -83,7 +86,7 @@
 
     Vue.component('todo-item', {
         props: ['todo'],
-        template: '<li>{{ todo.text }}</li>'
+        template: '<li>{{ todo.sensitiveWord }}</li>'
     });
 
     var app7 = new Vue({

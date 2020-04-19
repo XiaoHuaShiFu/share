@@ -81,7 +81,7 @@ public class SensitiveWordServiceImpl implements SensitiveWordService {
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Delete sensitiveWord fail.");
         }
 
-        return Result.success("Delete sensitiveWord:" + result.getData().getSensitiveWord() + " success.");
+        return Result.success("Delete sensitiveWord:{0} success.", result.getData().getSensitiveWord());
     }
 
     /**

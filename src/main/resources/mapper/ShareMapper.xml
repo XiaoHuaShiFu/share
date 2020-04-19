@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.ShareMapper">
+    <sql id="BaseColumnList">
+        id, user_id, content, views, collections, comments, likes, open, share_time, create_time, update_time
+    </sql>
+
+    <insert id="insertShare" parameterType="top.xiaohuashifu.share.pojo.do0.ShareDO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into share(user_id, content, share_time, open)
+        values(#{userId}, #{content}, #{shareTime}, #{open})
+    </insert>
+
+    <select id="getShare" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.ShareDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share
+        where id = #{id}
+    </select>
+
+    <select id="listShares" parameterType="top.xiaohuashifu.share.pojo.query.ShareQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.ShareDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="idList != null">
+                id in (
+                    <foreach collection="idList"  item="item" index="index" separator=",">
+                        #{item}
+                    </foreach>
+                )
+            </if>
+            <if test="content != null">
+                and content like "%"#{content}"%"
+            </if>
+            <if test="open != null">
+                and open = #{open}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*)
+        from share
+        where id = #{id}
+    </select>
+
+    <select id="countByIdAndUserId" resultType="java.lang.Integer">
+        select count(*)
+        from share
+        where id = #{id} and user_id = #{userId}
+    </select>
+
+    <update id="updateShare" parameterType="top.xiaohuashifu.share.pojo.do0.ShareDO">
+        update share
+        <set>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="open != null">
+                open = #{open},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="increase" parameterType="map">
+        update share
+        <set>
+            <if test="columnName == 'views'">
+                views = views + 1,
+            </if>
+            <if test="columnName == 'collections'">
+                collections = collections + 1,
+            </if>
+            <if test="columnName == 'comments'">
+                comments = comments + 1,
+            </if>
+            <if test="columnName == 'likes'">
+                likes = likes + 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="decrease" parameterType="map">
+        update share
+        <set>
+            <if test="columnName == 'views'">
+                views = views - 1,
+            </if>
+            <if test="columnName == 'collections'">
+                collections = collections - 1,
+            </if>
+            <if test="columnName == 'comments'">
+                comments = comments - 1,
+            </if>
+            <if test="columnName == 'likes'">
+                likes = likes - 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
