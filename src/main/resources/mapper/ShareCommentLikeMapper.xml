@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="top.xiaohuashifu.share.dao.ShareLikeMapper">
+<mapper namespace="top.xiaohuashifu.share.dao.ShareCommentLikeMapper">
     <sql id="BaseColumnList">
-        id, user_id, share_id, create_time, update_time
+        id, user_id, share_comment_id, create_time, update_time
     </sql>
 
-    <insert id="insertShareLike" parameterType="top.xiaohuashifu.share.pojo.do0.ShareLikeDO"
+    <insert id="insertShareCommentLike" parameterType="top.xiaohuashifu.share.pojo.do0.ShareCommentLikeDO"
             useGeneratedKeys="true" keyProperty="id">
-        insert into share_like(user_id, share_id)
-        values(#{userId}, #{shareId})
+        insert into share_comment_like(user_id, share_comment_id)
+        values(#{userId}, #{shareCommentId})
     </insert>
 
-    <delete id="deleteShareLikeByUserIdAndShareId" parameterType="map">
-        delete from share_like
-        where user_id = #{userId} and share_id = #{shareId}
+    <delete id="deleteShareCommentLikeByUserIdAndShareCommentId" parameterType="map">
+        delete from share_comment_like
+        where user_id = #{userId} and share_comment_id = #{shareCommentId}
     </delete>
 
-    <select id="getShareLike" resultType="top.xiaohuashifu.share.pojo.do0.ShareLikeDO" parameterType="integer">
+    <select id="getShareCommentLike" resultType="top.xiaohuashifu.share.pojo.do0.ShareCommentLikeDO"
+            parameterType="integer">
         select
         <include refid="BaseColumnList"/>
-        from share_like
+        from share_comment_like
         where id = #{id}
     </select>
 
-    <select id="countByUserIdAndShareId" parameterType="map" resultType="integer">
+    <select id="countByUserIdAndShareCommentId" parameterType="map" resultType="integer">
         select count(*)
-        from share_like
-        where user_id = #{userId} and share_id = #{shareId}
+        from share_comment_like
+        where user_id = #{userId} and share_comment_id = #{shareCommentId}
     </select>
 </mapper>
