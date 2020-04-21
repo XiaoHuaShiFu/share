@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.xiaohuashifu.share.dao.ShareCommentMapper">
+    <sql id="BaseColumnList">
+        id, user_id, share_id, content, comments, likes, comment_time, create_time, update_time
+    </sql>
+
+    <insert id="insertShareComment" parameterType="top.xiaohuashifu.share.pojo.do0.ShareCommentDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into share_comment(user_id, share_id, content, comment_time)
+        values(#{userId}, #{shareId}, #{content}, #{commentTime})
+
+    </insert>
+
+    <select id="getShareComment" parameterType="integer" resultType="top.xiaohuashifu.share.pojo.do0.ShareCommentDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_comment
+        where id = #{id}
+    </select>
+
+    <select id="listShareComments" parameterType="top.xiaohuashifu.share.pojo.query.ShareCommentQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.ShareCommentDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_comment
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="idList != null">
+                id in (
+                    <foreach collection="idList"  item="item" index="index" separator=",">
+                        #{item}
+                    </foreach>
+                )
+            </if>
+            <if test="shareId != null">
+                and share_id = #{shareId}
+            </if>
+        </where>
+        order by update_time, likes, comments desc
+    </select>
+
+    <update id="increase" parameterType="map">
+        update share_comment
+        <set>
+            <if test="columnName == 'comments'">
+                comments = comments + 1,
+            </if>
+            <if test="columnName == 'likes'">
+                likes = likes + 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="decrease" parameterType="map">
+        update share_comment
+        <set>
+            <if test="columnName == 'comments'">
+                comments = comments - 1,
+            </if>
+            <if test="columnName == 'likes'">
+                likes = likes - 1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

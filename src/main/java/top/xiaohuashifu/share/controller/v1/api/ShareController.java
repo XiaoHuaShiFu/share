@@ -88,7 +88,6 @@ public class ShareController {
      * FORBIDDEN_SUB_USER
      *
      * @bindErrors
-     * INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)

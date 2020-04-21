@@ -18,14 +18,18 @@ public class ShareCommentCommentQuery {
 
     private List<Integer> idList;
 
+    private Integer shareCommentId;
+
     public ShareCommentCommentQuery() {
     }
 
-    public ShareCommentCommentQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList) {
+    public ShareCommentCommentQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList,
+                                    Integer shareCommentId) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.id = id;
         this.idList = idList;
+        this.shareCommentId = shareCommentId;
     }
 
     public Integer getPageNum() {
@@ -60,6 +64,14 @@ public class ShareCommentCommentQuery {
         this.idList = idList;
     }
 
+    public Integer getShareCommentId() {
+        return shareCommentId;
+    }
+
+    public void setShareCommentId(Integer shareCommentId) {
+        this.shareCommentId = shareCommentId;
+    }
+
     @Override
     public String toString() {
         return "ShareCommentCommentQuery{" +
@@ -67,6 +79,7 @@ public class ShareCommentCommentQuery {
                 ", pageSize=" + pageSize +
                 ", id=" + id +
                 ", idList=" + idList +
+                ", shareCommentId=" + shareCommentId +
                 '}';
     }
 }

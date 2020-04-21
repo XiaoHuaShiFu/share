@@ -26,14 +26,14 @@ public class ShareCommentCommentVO {
 
     private UserVO user;
 
-    private ShareCommentCommentVO parentShareCommentComment;
+    private UserVO parentShareCommentCommentUser;
 
     public ShareCommentCommentVO() {
     }
 
     public ShareCommentCommentVO(Integer id, Integer userId, Integer shareCommentId, Integer parentShareCommentCommentId,
                                  String content, Integer likes, Date commentTime, UserVO user,
-                                 ShareCommentCommentVO parentShareCommentComment) {
+                                 UserVO parentShareCommentCommentUser) {
         this.id = id;
         this.userId = userId;
         this.shareCommentId = shareCommentId;
@@ -42,7 +42,7 @@ public class ShareCommentCommentVO {
         this.likes = likes;
         this.commentTime = commentTime;
         this.user = user;
-        this.parentShareCommentComment = parentShareCommentComment;
+        this.parentShareCommentCommentUser = parentShareCommentCommentUser;
     }
 
     public Integer getId() {
@@ -109,12 +109,12 @@ public class ShareCommentCommentVO {
         this.user = user;
     }
 
-    public ShareCommentCommentVO getParentShareCommentComment() {
-        return parentShareCommentComment;
+    public UserVO getParentShareCommentCommentUser() {
+        return parentShareCommentCommentUser;
     }
 
-    public void setParentShareCommentComment(ShareCommentCommentVO parentShareCommentComment) {
-        this.parentShareCommentComment = parentShareCommentComment;
+    public void setParentShareCommentCommentUser(UserVO parentShareCommentCommentUser) {
+        this.parentShareCommentCommentUser = parentShareCommentCommentUser;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ShareCommentCommentVO {
                 ", likes=" + likes +
                 ", commentTime=" + commentTime +
                 ", user=" + user +
-                ", parentShareCommentComment=" + parentShareCommentComment +
+                ", parentShareCommentCommentUser=" + parentShareCommentCommentUser +
                 '}';
     }
 }

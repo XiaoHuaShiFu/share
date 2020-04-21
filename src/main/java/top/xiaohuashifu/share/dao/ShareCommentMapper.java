@@ -1,72 +1,38 @@
 package top.xiaohuashifu.share.dao;
+
 import org.apache.ibatis.annotations.Param;
-import top.xiaohuashifu.share.pojo.do0.UserDO;
-import top.xiaohuashifu.share.pojo.query.UserQuery;
+import top.xiaohuashifu.share.pojo.do0.ShareCommentDO;
+import top.xiaohuashifu.share.pojo.query.ShareCommentQuery;
 
 import java.util.List;
 
 public interface ShareCommentMapper {
 
     /**
-     * 保存用户
-     * @param user 用户对象
+     * 保存分享评论
+     * @param shareCommentDO 分享评论
      * @return 保存的数量
      */
-    int insertUser(UserDO user);
+    int insertShareComment(ShareCommentDO shareCommentDO);
 
     /**
-     * 获取用户
-     * @param id 用户编号
-     * @return userDO
+     * 获取分享评论
+     * @param id 分享评论编号
+     * @return ShareCommentDO
      */
-    UserDO getUser(Integer id);
+    ShareCommentDO getShareComment(Integer id);
 
     /**
-     * 获取用户
-     * @param username 用户名
-     * @return userDO
-     */
-    UserDO getUserByUsername(String username);
-
-    /**
-     * 获取query过滤参数后的用户列表，包含pageNum，pageSize等过滤参数，
+     * 获取query过滤参数后的分享评论列表，包含pageNum，pageSize等过滤参数，
      *
      * @param query 查询参数
-     * @return UserDOList
+     * @return ShareCommentDOList
      */
-    List<UserDO> listUsers(UserQuery query);
-
-    /**
-     * 获取该username的用户数量
-     * @param username 用户名
-     * @return 该username的用户数量
-     */
-    int countByUsername(String username);
-
-    /**
-     * 获取该phone的用户数量
-     * @param phone 手机号码
-     * @return 该phone的用户数量
-     */
-    int countByPhone(String phone);
-
-    /**
-     * 获取该email的用户数量
-     * @param email 电子邮箱
-     * @return 该email的用户数量
-     */
-    int countByEmail(String email);
-
-    /**
-     * 更新用户信息
-     * @param userDO 要更新的用户信息
-     * @return 成功更新的条数
-     */
-    int updateUser(UserDO userDO);
+    List<ShareCommentDO> listShareComments(ShareCommentQuery query);
 
     /**
      * 使得列值自增1
-     * @param id 用户id
+     * @param id 分享评论id
      * @param columnName 列名
      * @return 更新列数
      */
@@ -74,7 +40,7 @@ public interface ShareCommentMapper {
 
     /**
      * 使得列值自减1
-     * @param id 用户id
+     * @param id 分享评论id
      * @param columnName 列名
      * @return 更新列数
      */

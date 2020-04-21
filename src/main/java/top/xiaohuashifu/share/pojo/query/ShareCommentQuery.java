@@ -1,7 +1,5 @@
 package top.xiaohuashifu.share.pojo.query;
 
-import top.xiaohuashifu.share.constant.Gender;
-
 import java.util.List;
 
 /**
@@ -20,14 +18,17 @@ public class ShareCommentQuery {
 
     private List<Integer> idList;
 
+    private Integer shareId;
+
     public ShareCommentQuery() {
     }
 
-    public ShareCommentQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList) {
+    public ShareCommentQuery(Integer pageNum, Integer pageSize, Integer id, List<Integer> idList, Integer shareId) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.id = id;
         this.idList = idList;
+        this.shareId = shareId;
     }
 
     public Integer getPageNum() {
@@ -62,6 +63,14 @@ public class ShareCommentQuery {
         this.idList = idList;
     }
 
+    public Integer getShareId() {
+        return shareId;
+    }
+
+    public void setShareId(Integer shareId) {
+        this.shareId = shareId;
+    }
+
     @Override
     public String toString() {
         return "ShareCommentQuery{" +
@@ -69,6 +78,7 @@ public class ShareCommentQuery {
                 ", pageSize=" + pageSize +
                 ", id=" + id +
                 ", idList=" + idList +
+                ", shareId=" + shareId +
                 '}';
     }
 }
