@@ -5,13 +5,36 @@
     <title>Title</title>
     <script src="../config/vue.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="//unpkg.com/view-design/dist/styles/iview.css">
+    <!-- import iView -->
+    <script src="//unpkg.com/view-design/dist/iview.min.js"></script>
+
 </head>
 <body>
 
 <div id="app">
-    {{a}}
-    {{data}}
+    <i-button @click="show">Click me!</i-button>
+    <Modal v-model="visible" title="Welcome">Welcome to ViewUI</Modal>
 </div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
+        }
+    })
+</script>
+
+<!--<div id="app">-->
+    <!--{{a}}-->
+    <!--{{data}}-->
+<!--</div>-->
 
 <div id="app-2">
   <span v-bind:title="message">
@@ -146,15 +169,15 @@
         }
     });
 
-    var vm = new Vue({
-        el: "#app",
-        data: {
-            a: 1,
-            data: "tes"
-        }
-    });
-
-    vm.a = "test";
+    // var vm = new Vue({
+    //     el: "#app",
+    //     data: {
+    //         a: 1,
+    //         data: "tes"
+    //     }
+    // });
+    //
+    // vm.a = "test";
 </script>
 
 </body>
