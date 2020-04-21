@@ -133,6 +133,17 @@ public class ShareCollectionServiceImpl implements ShareCollectionService {
     }
 
     /**
+     * 计算shareCollection的数量
+     * @param userId 用户id
+     * @param shareId 分享id
+     * @return ShareCollection的数量
+     */
+    @Override
+    public Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId) {
+        return Result.success(shareCollectionMapper.countByUserIdAndShareId(userId, shareId));
+    }
+
+    /**
      * 获取PageInfo<ShareCollectionDO>通过查询参数query
      *
      * @param query 查询参数

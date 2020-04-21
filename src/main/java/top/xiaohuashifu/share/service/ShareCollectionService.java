@@ -19,5 +19,7 @@ public interface ShareCollectionService {
 
     Result<ShareCollectionDO> getShareCollection(Integer id);
 
+    Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId);
+
     Result<PageInfo<ShareCollectionDO>> listShareCollections(ShareCollectionQuery query);
 }

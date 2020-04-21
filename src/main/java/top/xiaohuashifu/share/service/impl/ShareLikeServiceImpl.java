@@ -116,4 +116,15 @@ public class ShareLikeServiceImpl implements ShareLikeService {
         return Result.success(shareLikeDO);
     }
 
+    /**
+     * 获取ShareLike的数量
+     * @param userId 用户id
+     * @param shareId 分享id
+     * @return ShareLike的数量
+     */
+    @Override
+    public Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId) {
+        return Result.success(shareLikeMapper.countByUserIdAndShareId(userId, shareId));
+    }
+
 }

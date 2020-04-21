@@ -17,4 +17,6 @@ public interface ShareViewService {
 
     Result<ShareViewDO> getShareView(Integer id);
 
+    Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId);
+
 }

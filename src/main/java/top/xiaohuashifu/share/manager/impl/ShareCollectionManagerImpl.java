@@ -55,7 +55,7 @@ public class ShareCollectionManagerImpl implements ShareCollectionManager {
 
         ShareCollectionDO shareCollectionDO = getShareCollectionResult.getData();
         // 获取share
-        Result<ShareVO> getShareResult = shareManager.getShare(shareCollectionDO.getShareId());
+        Result<ShareVO> getShareResult = shareManager.getShare(shareCollectionDO.getShareId(), 0);
         if (!getShareResult.isSuccess()) {
             return Result.fail(getShareResult);
         }

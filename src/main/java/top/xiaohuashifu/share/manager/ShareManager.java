@@ -20,9 +20,9 @@ public interface ShareManager {
 
     Result<ShareVO> saveShare(ShareDO shareDO, List<MultipartFile> imageList);
 
-    Result<ShareVO> getShare(Integer id);
+    Result<ShareVO> getShare(Integer id, Integer userId);
 
-    Result<PageInfo<ShareVO>> listShares(ShareQuery query);
+    Result<PageInfo<ShareVO>> listShares(ShareQuery query, Integer userId);
 
     Result<ShareVO> updateShare(ShareDO shareDO);
 

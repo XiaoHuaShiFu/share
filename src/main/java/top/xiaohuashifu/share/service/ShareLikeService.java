@@ -17,4 +17,6 @@ public interface ShareLikeService {
 
     Result<ShareLikeDO> getShareLike(Integer id);
 
+    Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId);
+
 }

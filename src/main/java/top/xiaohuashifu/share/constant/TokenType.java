@@ -16,5 +16,10 @@ public enum TokenType {
     /**
      * 管理员的Token
      */
-    ADMIN
+    ADMIN,
+
+    /**
+     * 匿名Token
+     */
+    ANON
 }

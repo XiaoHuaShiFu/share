@@ -35,15 +35,25 @@ public class ShareManagerImpl implements ShareManager {
 
     private final ShareImageService shareImageService;
 
+    private final ShareViewService shareViewService;
+
+    private final ShareCollectionService shareCollectionService;
+
+    private final ShareLikeService shareLikeService;
+
     private final UserService userService;
 
     private final Mapper mapper;
 
     @Autowired
-    public ShareManagerImpl(ShareService shareService, ShareImageService shareImageService, UserService userService,
-                            Mapper mapper) {
+    public ShareManagerImpl(ShareService shareService, ShareImageService shareImageService,
+                            ShareViewService shareViewService, ShareCollectionService shareCollectionService,
+                            ShareLikeService shareLikeService, UserService userService, Mapper mapper) {
         this.shareService = shareService;
         this.shareImageService = shareImageService;
+        this.shareViewService = shareViewService;
+        this.shareCollectionService = shareCollectionService;
+        this.shareLikeService = shareLikeService;
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -78,7 +88,7 @@ public class ShareManagerImpl implements ShareManager {
             }
         }
 
-        return getShare(shareDO.getId());
+        return getShare(shareDO.getId(), shareDO.getUserId());
     }
 
     /**
@@ -88,7 +98,7 @@ public class ShareManagerImpl implements ShareManager {
      * @return ShareVO
      */
     @Override
-    public Result<ShareVO> getShare(Integer id) {
+    public Result<ShareVO> getShare(Integer id, Integer userId) {
         // 获取share
         Result<ShareDO> getShareResult = shareService.getShare(id);
         if (!getShareResult.isSuccess()) {
@@ -108,6 +118,16 @@ public class ShareManagerImpl implements ShareManager {
             return Result.fail(getUserResult);
         }
 
+        boolean viewed = false;
+        boolean collected = false;
+        boolean liked = false;
+        // 如果userId不等于0，说明此次查询是用户发起的，需要附带viewed、collected、liked等信息
+        if (userId != 0) {
+            viewed = shareViewService.countByUserIdAndShareId(userId, id).getData() >= 1;
+            collected = shareCollectionService.countByUserIdAndShareId(userId, id).getData() >= 1;
+            liked = shareLikeService.countByUserIdAndShareId(userId, id).getData() >= 1;
+        }
+
         // 组装
         ShareVO shareVO = mapper.map(shareDO, ShareVO.class);
         List<ShareImageDO> shareImageDOList = listShareImagesResult.getData();
@@ -118,6 +138,9 @@ public class ShareManagerImpl implements ShareManager {
         UserDO userDO = getUserResult.getData();
         UserVO userVO = mapper.map(userDO, UserVO.class);
         shareVO.setUser(userVO);
+        shareVO.setViewed(viewed);
+        shareVO.setCollected(collected);
+        shareVO.setLiked(liked);
         return Result.success(shareVO);
     }
 
@@ -128,7 +151,7 @@ public class ShareManagerImpl implements ShareManager {
      * @return PageInfo<ShareVO>
      */
     @Override
-    public Result<PageInfo<ShareVO>> listShares(ShareQuery query) {
+    public Result<PageInfo<ShareVO>> listShares(ShareQuery query, Integer userId) {
         // 获取shareList
         Result<PageInfo<ShareDO>> listSharesResult = shareService.listShares(query);
         if (!listSharesResult.isSuccess()) {
@@ -139,7 +162,7 @@ public class ShareManagerImpl implements ShareManager {
         List<ShareDO> shareDOList = listSharesResult.getData().getList();
         List<ShareVO> shareVOList = new ArrayList<>();
         for (ShareDO shareDO : shareDOList) {
-            Result<ShareVO> getShareResult = getShare(shareDO.getId());
+            Result<ShareVO> getShareResult = getShare(shareDO.getId(), userId);
             if (!getShareResult.isSuccess()) {
                 return Result.fail(getShareResult);
             }
@@ -163,7 +186,7 @@ public class ShareManagerImpl implements ShareManager {
             return Result.fail(result);
         }
 
-        return getShare(result.getData().getId());
+        return getShare(result.getData().getId(), shareDO.getUserId());
     }
 
     /**
@@ -180,6 +203,6 @@ public class ShareManagerImpl implements ShareManager {
             return Result.fail(result);
         }
 
-        return getShare(result.getData().getId());
+        return getShare(result.getData().getId(), 0);
     }
 }

@@ -91,9 +91,23 @@ public class ShareController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN, TokenType.ANON})
     @ErrorHandler
-    public Object get(@PathVariable @Id Integer id) {
-        Result<ShareVO> result = shareManager.getShare(id);
+    public Object get(TokenAO tokenAO, @PathVariable @Id Integer id) {
+        // 如果是admin-token或者anon-token
+        Result<ShareVO> result;
+        if (tokenAO.getType() == TokenType.ADMIN || tokenAO.getType() == TokenType.ANON) {
+            result = shareManager.getShare(id, 0);
+        }
+        // user-token
+        else if (tokenAO.getType() == TokenType.USER){
+            result = shareManager.getShare(id, tokenAO.getId());
+        }
+        // 非法权限token
+        else {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        }
+
         return !result.isSuccess() ? result : result.getData();
     }
 
@@ -107,9 +121,23 @@ public class ShareController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN, TokenType.ANON})
     @ErrorHandler
-    public Object get(ShareQuery query) {
-        Result<PageInfo<ShareVO>> result = shareManager.listShares(query);
+    public Object get(TokenAO tokenAO, ShareQuery query) {
+        // 如果是admin-token或者anon-token
+        Result<PageInfo<ShareVO>> result;
+        if (tokenAO.getType() == TokenType.ADMIN || tokenAO.getType() == TokenType.ANON) {
+            result = shareManager.listShares(query, 0);
+        }
+        // user-token
+        else if (tokenAO.getType() == TokenType.USER){
+            result = shareManager.listShares(query, tokenAO.getId());
+        }
+        // 非法权限token
+        else {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        }
+
         return !result.isSuccess() ? result : result.getData();
     }
 

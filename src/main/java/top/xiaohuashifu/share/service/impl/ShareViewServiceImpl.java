@@ -116,4 +116,15 @@ public class ShareViewServiceImpl implements ShareViewService {
         return Result.success(shareViewDO);
     }
 
+    /**
+     * 获取ShareViewDO的数量
+     * @param userId 用户id
+     * @param shareId 分享id
+     * @return ShareViewDO的数量
+     */
+    @Override
+    public Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId) {
+        return Result.success(shareViewMapper.countByUserIdAndShareId(userId, shareId));
+    }
+
 }

@@ -33,11 +33,27 @@ public class ShareVO {
 
     private List<ShareImageVO> shareImageList;
 
+    /**
+     * 已经观看
+     */
+    private Boolean viewed;
+
+    /**
+     * 已经收藏
+     */
+    private Boolean collected;
+
+    /**
+     * 已经点赞
+     */
+    private Boolean liked;
+
     public ShareVO() {
     }
 
     public ShareVO(Integer id, Integer userId, String content, Integer views, Integer collections, Integer comments,
-                   Integer likes, Boolean open, Date shareTime, UserVO user, List<ShareImageVO> shareImageList) {
+                   Integer likes, Boolean open, Date shareTime, UserVO user, List<ShareImageVO> shareImageList,
+                   Boolean viewed, Boolean collected, Boolean liked) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -49,6 +65,9 @@ public class ShareVO {
         this.shareTime = shareTime;
         this.user = user;
         this.shareImageList = shareImageList;
+        this.viewed = viewed;
+        this.collected = collected;
+        this.liked = liked;
     }
 
     public Integer getId() {
@@ -139,6 +158,30 @@ public class ShareVO {
         this.shareImageList = shareImageList;
     }
 
+    public Boolean getViewed() {
+        return viewed;
+    }
+
+    public void setViewed(Boolean viewed) {
+        this.viewed = viewed;
+    }
+
+    public Boolean getCollected() {
+        return collected;
+    }
+
+    public void setCollected(Boolean collected) {
+        this.collected = collected;
+    }
+
+    public Boolean getLiked() {
+        return liked;
+    }
+
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
+
     @Override
     public String toString() {
         return "ShareVO{" +
@@ -153,6 +196,9 @@ public class ShareVO {
                 ", shareTime=" + shareTime +
                 ", user=" + user +
                 ", shareImageList=" + shareImageList +
+                ", viewed=" + viewed +
+                ", collected=" + collected +
+                ", liked=" + liked +
                 '}';
     }
 }
