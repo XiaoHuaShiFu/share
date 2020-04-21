@@ -17,4 +17,6 @@ public interface ShareCommentLikeService {
 
     Result<ShareCommentLikeDO> getShareCommentLike(Integer id);
 
+    Result<Integer> countByUserIdAndShareCommentId(Integer userId, Integer shareCommentId);
+
 }

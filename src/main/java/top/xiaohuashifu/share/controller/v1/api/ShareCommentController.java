@@ -84,9 +84,23 @@ public class ShareCommentController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN, TokenType.ANON})
     @ErrorHandler
-    public Object get(@PathVariable @Id Integer id) {
-        Result<ShareCommentVO> result = shareCommentManager.getShareComment(id);
+    public Object get(TokenAO tokenAO, @PathVariable @Id Integer id) {
+        Result<ShareCommentVO> result;
+        // 如果是admin-token或者anon-token
+        if (tokenAO.getType() == TokenType.ADMIN || tokenAO.getType() == TokenType.ANON) {
+            result = shareCommentManager.getShareComment(id, 0);
+        }
+        // user-token
+        else if (tokenAO.getType() == TokenType.USER){
+            result = shareCommentManager.getShareComment(id, tokenAO.getId());
+        }
+        // 非法权限token
+        else {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        }
+
         return !result.isSuccess() ? result : result.getData();
     }
 
@@ -100,9 +114,23 @@ public class ShareCommentController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN, TokenType.ANON})
     @ErrorHandler
-    public Object get(ShareCommentQuery query) {
-        Result<PageInfo<ShareCommentVO>> result = shareCommentManager.listShareComments(query);
+    public Object get(TokenAO tokenAO, ShareCommentQuery query) {
+        Result<PageInfo<ShareCommentVO>> result;
+        // 如果是admin-token或者anon-token
+        if (tokenAO.getType() == TokenType.ADMIN || tokenAO.getType() == TokenType.ANON) {
+            result = shareCommentManager.listShareComments(query, 0);
+        }
+        // user-token
+        else if (tokenAO.getType() == TokenType.USER){
+            result = shareCommentManager.listShareComments(query, tokenAO.getId());
+        }
+        // 非法权限token
+        else {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
+        }
+
         return !result.isSuccess() ? result : result.getData();
     }
 

@@ -28,12 +28,14 @@ public class ShareCommentCommentVO {
 
     private UserVO parentShareCommentCommentUser;
 
+    private Boolean liked;
+
     public ShareCommentCommentVO() {
     }
 
     public ShareCommentCommentVO(Integer id, Integer userId, Integer shareCommentId, Integer parentShareCommentCommentId,
                                  String content, Integer likes, Date commentTime, UserVO user,
-                                 UserVO parentShareCommentCommentUser) {
+                                 UserVO parentShareCommentCommentUser, Boolean liked) {
         this.id = id;
         this.userId = userId;
         this.shareCommentId = shareCommentId;
@@ -43,6 +45,7 @@ public class ShareCommentCommentVO {
         this.commentTime = commentTime;
         this.user = user;
         this.parentShareCommentCommentUser = parentShareCommentCommentUser;
+        this.liked = liked;
     }
 
     public Integer getId() {
@@ -117,6 +120,14 @@ public class ShareCommentCommentVO {
         this.parentShareCommentCommentUser = parentShareCommentCommentUser;
     }
 
+    public Boolean getLiked() {
+        return liked;
+    }
+
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
+
     @Override
     public String toString() {
         return "ShareCommentCommentVO{" +
@@ -129,6 +140,7 @@ public class ShareCommentCommentVO {
                 ", commentTime=" + commentTime +
                 ", user=" + user +
                 ", parentShareCommentCommentUser=" + parentShareCommentCommentUser +
+                ", liked=" + liked +
                 '}';
     }
 }

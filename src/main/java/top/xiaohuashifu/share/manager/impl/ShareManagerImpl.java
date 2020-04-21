@@ -95,6 +95,7 @@ public class ShareManagerImpl implements ShareManager {
      * 获取ShareVO通过id
      *
      * @param id 分享编号
+     * @param userId 用户编号，也就是为了附带点赞、收藏、观看的信息
      * @return ShareVO
      */
     @Override
@@ -148,6 +149,7 @@ public class ShareManagerImpl implements ShareManager {
      * 获取PageInfo<ShareVO>通过查询参数query
      *
      * @param query 查询参数
+     * @param userId 用户编号，也就是为了附带点赞、收藏、观看的信息
      * @return PageInfo<ShareVO>
      */
     @Override

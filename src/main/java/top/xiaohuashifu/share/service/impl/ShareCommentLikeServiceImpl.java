@@ -121,4 +121,15 @@ public class ShareCommentLikeServiceImpl implements ShareCommentLikeService {
         return Result.success(shareCommentLikeDO);
     }
 
+    /**
+     * 获取ShareComment的数量
+     * @param userId 用户编号
+     * @param shareCommentId shareComment编号
+     * @return ShareComment数量
+     */
+    @Override
+    public Result<Integer> countByUserIdAndShareCommentId(Integer userId, Integer shareCommentId) {
+        return Result.success(shareCommentLikeMapper.countByUserIdAndShareCommentId(userId, shareCommentId));
+    }
+
 }

@@ -12,6 +12,7 @@ import top.xiaohuashifu.share.pojo.query.ShareCommentQuery;
 import top.xiaohuashifu.share.pojo.vo.ShareCommentVO;
 import top.xiaohuashifu.share.pojo.vo.UserVO;
 import top.xiaohuashifu.share.result.Result;
+import top.xiaohuashifu.share.service.ShareCommentLikeService;
 import top.xiaohuashifu.share.service.ShareCommentService;
 import top.xiaohuashifu.share.service.UserService;
 
@@ -29,13 +30,16 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
 
     private final ShareCommentService shareCommentService;
 
+    private final ShareCommentLikeService shareCommentLikeService;
+
     private final UserService userService;
 
     private final Mapper mapper;
 
     @Autowired
-    public ShareCommentManagerImpl(ShareCommentService shareCommentService, UserService userService, Mapper mapper) {
+    public ShareCommentManagerImpl(ShareCommentService shareCommentService, ShareCommentLikeService shareCommentLikeService, UserService userService, Mapper mapper) {
         this.shareCommentService = shareCommentService;
+        this.shareCommentLikeService = shareCommentLikeService;
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -53,17 +57,18 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
             return Result.fail(saveShareCommentResult);
         }
 
-        return getShareComment(shareCommentDO.getId());
+        return getShareComment(shareCommentDO.getId(), shareCommentDO.getUserId());
     }
 
     /**
      * 获取ShareCommentVO通过id
      *
      * @param id 分享评论编号
+     * @param userId 用户编号，也就是为了附带点赞信息
      * @return ShareCommentVO
      */
     @Override
-    public Result<ShareCommentVO> getShareComment(Integer id) {
+    public Result<ShareCommentVO> getShareComment(Integer id, Integer userId) {
         // 获取shareComment
         Result<ShareCommentDO> getShareCommentResult = shareCommentService.getShareComment(id);
         if (!getShareCommentResult.isSuccess()) {
@@ -77,11 +82,18 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
             return Result.fail(getUserResult);
         }
 
+        boolean liked = false;
+        // 如果userId不等于0，说明此次查询是用户发起的，需要附带viewed
+        if (userId != 0) {
+            liked = shareCommentLikeService.countByUserIdAndShareCommentId(userId, id).getData() >= 1;
+        }
+
         // 组装
         ShareCommentVO shareCommentVO = mapper.map(shareCommentDO, ShareCommentVO.class);
         UserDO userDO = getUserResult.getData();
         UserVO userVO = mapper.map(userDO, UserVO.class);
         shareCommentVO.setUser(userVO);
+        shareCommentVO.setLiked(liked);
         return Result.success(shareCommentVO);
     }
 
@@ -89,10 +101,11 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
      * 获取PageInfo<ShareCommentVO>通过查询参数query
      *
      * @param query 查询参数
+     * @param userId 用户编号，也就是为了附带点赞信息
      * @return PageInfo<ShareCommentVO>
      */
     @Override
-    public Result<PageInfo<ShareCommentVO>> listShareComments(ShareCommentQuery query) {
+    public Result<PageInfo<ShareCommentVO>> listShareComments(ShareCommentQuery query, Integer userId) {
         // 获取shareCommentList
         Result<PageInfo<ShareCommentDO>> listShareCommentsResult = shareCommentService.listShareComments(query);
         if (!listShareCommentsResult.isSuccess()) {
@@ -103,7 +116,7 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
         List<ShareCommentDO> shareCommentDOList = listShareCommentsResult.getData().getList();
         List<ShareCommentVO> shareCommentVOList = new ArrayList<>();
         for (ShareCommentDO shareCommentDO : shareCommentDOList) {
-            Result<ShareCommentVO> getShareCommentResult = getShareComment(shareCommentDO.getId());
+            Result<ShareCommentVO> getShareCommentResult = getShareComment(shareCommentDO.getId(), userId);
             if (!getShareCommentResult.isSuccess()) {
                 return Result.fail(getShareCommentResult);
             }
@@ -128,6 +141,6 @@ public class ShareCommentManagerImpl implements ShareCommentManager {
             return Result.fail(result);
         }
 
-        return getShareComment(result.getData().getId());
+        return getShareComment(result.getData().getId(), 0);
     }
 }

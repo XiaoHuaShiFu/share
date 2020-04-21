@@ -12,6 +12,7 @@ import top.xiaohuashifu.share.pojo.query.ShareCommentCommentQuery;
 import top.xiaohuashifu.share.pojo.vo.ShareCommentCommentVO;
 import top.xiaohuashifu.share.pojo.vo.UserVO;
 import top.xiaohuashifu.share.result.Result;
+import top.xiaohuashifu.share.service.ShareCommentCommentLikeService;
 import top.xiaohuashifu.share.service.ShareCommentCommentService;
 import top.xiaohuashifu.share.service.UserService;
 
@@ -29,14 +30,18 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
 
     private final ShareCommentCommentService shareCommentCommentService;
 
+    private final ShareCommentCommentLikeService shareCommentCommentLikeService;
+
     private final UserService userService;
 
     private final Mapper mapper;
 
     @Autowired
     public ShareCommentCommentManagerImpl(ShareCommentCommentService shareCommentCommentService,
+                                          ShareCommentCommentLikeService shareCommentCommentLikeService,
                                           UserService userService, Mapper mapper) {
         this.shareCommentCommentService = shareCommentCommentService;
+        this.shareCommentCommentLikeService = shareCommentCommentLikeService;
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -55,17 +60,18 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
             return Result.fail(saveShareCommentCommentResult);
         }
 
-        return getShareCommentComment(shareCommentCommentDO.getId());
+        return getShareCommentComment(shareCommentCommentDO.getId(), shareCommentCommentDO.getUserId());
     }
 
     /**
      * 获取ShareCommentCommentVO通过id
      *
      * @param id 分享评论的评论编号
+     * @param userId 用户编号，也就是为了附带点赞信息
      * @return ShareCommentCommentVO
      */
     @Override
-    public Result<ShareCommentCommentVO> getShareCommentComment(Integer id) {
+    public Result<ShareCommentCommentVO> getShareCommentComment(Integer id, Integer userId) {
         // 获取shareCommentComment
         Result<ShareCommentCommentDO> getShareCommentCommentResult =
                 shareCommentCommentService.getShareCommentComment(id);
@@ -91,8 +97,7 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
             }
 
             UserDO userDO = getUserResult.getData();
-            UserVO userVO = mapper.map(userDO, UserVO.class);
-            parentShareCommentCommentUser = userVO;
+            parentShareCommentCommentUser = mapper.map(userDO, UserVO.class);
         }
 
         // 获取user
@@ -101,12 +106,19 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
             return Result.fail(getUserResult);
         }
 
+        boolean liked = false;
+        // 如果userId不等于0，说明此次查询是用户发起的，需要附带viewed
+        if (userId != 0) {
+            liked = shareCommentCommentLikeService.countByUserIdAndShareCommentCommentId(userId, id).getData() >= 1;
+        }
+
         // 组装
         ShareCommentCommentVO shareCommentCommentVO = mapper.map(shareCommentCommentDO, ShareCommentCommentVO.class);
         UserDO userDO = getUserResult.getData();
         UserVO userVO = mapper.map(userDO, UserVO.class);
         shareCommentCommentVO.setUser(userVO);
         shareCommentCommentVO.setParentShareCommentCommentUser(parentShareCommentCommentUser);
+        shareCommentCommentVO.setLiked(liked);
         return Result.success(shareCommentCommentVO);
     }
 
@@ -114,10 +126,12 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
      * 获取PageInfo<ShareCommentCommentVO>通过查询参数query
      *
      * @param query 查询参数
+     * @param userId 用户编号，也就是为了附带点赞信息
      * @return PageInfo<ShareCommentCommentVO>
      */
     @Override
-    public Result<PageInfo<ShareCommentCommentVO>> listShareCommentComments(ShareCommentCommentQuery query) {
+    public Result<PageInfo<ShareCommentCommentVO>> listShareCommentComments(ShareCommentCommentQuery query,
+                                                                            Integer userId) {
         // 获取shareCommentList
         Result<PageInfo<ShareCommentCommentDO>> listShareCommentCommentsResult =
                 shareCommentCommentService.listShareCommentComments(query);
@@ -130,7 +144,7 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
         List<ShareCommentCommentVO> shareCommentCommentVOList = new ArrayList<>();
         for (ShareCommentCommentDO shareCommentCommentDO : shareCommentCommentDOList) {
             Result<ShareCommentCommentVO> getShareCommentCommentResult =
-                    getShareCommentComment(shareCommentCommentDO.getId());
+                    getShareCommentComment(shareCommentCommentDO.getId(), userId);
             if (!getShareCommentCommentResult.isSuccess()) {
                 return Result.fail(getShareCommentCommentResult);
             }
@@ -156,6 +170,6 @@ public class ShareCommentCommentManagerImpl implements ShareCommentCommentManage
             return Result.fail(result);
         }
 
-        return getShareCommentComment(result.getData().getId());
+        return getShareCommentComment(result.getData().getId(), 0);
     }
 }

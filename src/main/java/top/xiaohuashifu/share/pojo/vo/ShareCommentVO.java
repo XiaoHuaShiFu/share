@@ -26,11 +26,16 @@ public class ShareCommentVO {
 
     private UserVO user;
 
+    /**
+     * 是否已经点赞
+     */
+    private Boolean liked;
+
     public ShareCommentVO() {
     }
 
     public ShareCommentVO(Integer id, Integer userId, Integer shareId, String content, Integer comments, Integer likes,
-                          Date commentTime, UserVO user) {
+                          Date commentTime, UserVO user, Boolean liked) {
         this.id = id;
         this.userId = userId;
         this.shareId = shareId;
@@ -39,6 +44,7 @@ public class ShareCommentVO {
         this.likes = likes;
         this.commentTime = commentTime;
         this.user = user;
+        this.liked = liked;
     }
 
     public Integer getId() {
@@ -105,6 +111,14 @@ public class ShareCommentVO {
         this.user = user;
     }
 
+    public Boolean getLiked() {
+        return liked;
+    }
+
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
+
     @Override
     public String toString() {
         return "ShareCommentVO{" +
@@ -116,6 +130,7 @@ public class ShareCommentVO {
                 ", likes=" + likes +
                 ", commentTime=" + commentTime +
                 ", user=" + user +
+                ", liked=" + liked +
                 '}';
     }
 }

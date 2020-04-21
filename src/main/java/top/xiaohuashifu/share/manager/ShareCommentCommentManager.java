@@ -17,9 +17,9 @@ public interface ShareCommentCommentManager {
 
     Result<ShareCommentCommentVO> saveShareCommentComment(ShareCommentCommentDO shareCommentCommentDO);
 
-    Result<ShareCommentCommentVO> getShareCommentComment(Integer id);
+    Result<ShareCommentCommentVO> getShareCommentComment(Integer id, Integer userId);
 
-    Result<PageInfo<ShareCommentCommentVO>> listShareCommentComments(ShareCommentCommentQuery query);
+    Result<PageInfo<ShareCommentCommentVO>> listShareCommentComments(ShareCommentCommentQuery query, Integer userId);
 
     Result<ShareCommentCommentVO> updateShareCommentComment(Integer id, String parameterName, Operator operator);
 
