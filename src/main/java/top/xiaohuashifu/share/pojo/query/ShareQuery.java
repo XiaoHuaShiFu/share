@@ -27,11 +27,14 @@ public class ShareQuery {
 
     private Boolean open;
 
+    // TODO: 2020/4/23 这里要做校验
+    private String orderBy;
+
     public ShareQuery() {
     }
 
     public ShareQuery(Integer pageNum, Integer pageSize, Integer id, Integer userId, List<Integer> idList,
-                      String content, Boolean open) {
+                      String content, Boolean open, String orderBy) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.id = id;
@@ -39,6 +42,7 @@ public class ShareQuery {
         this.idList = idList;
         this.content = content;
         this.open = open;
+        this.orderBy = orderBy;
     }
 
     public Integer getPageNum() {
@@ -97,6 +101,14 @@ public class ShareQuery {
         this.open = open;
     }
 
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
     @Override
     public String toString() {
         return "ShareQuery{" +
@@ -107,6 +119,7 @@ public class ShareQuery {
                 ", idList=" + idList +
                 ", content='" + content + '\'' +
                 ", open=" + open +
+                ", orderBy='" + orderBy + '\'' +
                 '}';
     }
 }

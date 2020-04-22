@@ -44,7 +44,9 @@
                 and open = #{open}
             </if>
         </where>
-        order by update_time desc
+        <if test="orderBy != null">
+            order by ${orderBy} desc
+        </if>
     </select>
 
     <select id="count" resultType="java.lang.Integer">
