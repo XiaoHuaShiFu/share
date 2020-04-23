@@ -44,17 +44,17 @@ public class UserDO {
             groups = {Group.class})
     private String nickName;
 
-    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The gender must be not null.",
-            groups = {GroupPost.class})
+//    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The gender must be not null.",
+//            groups = {GroupPost.class})
     private Gender gender;
 
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The phone must be not blank.",
-            groups = {GroupPost.class})
+//    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The phone must be not blank.",
+//            groups = {GroupPost.class})
     @Phone(groups = {Group.class})
     private String phone;
 
-    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The email must be not blank.",
-            groups = {GroupPost.class})
+//    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The email must be not blank.",
+//            groups = {GroupPost.class})
     @Email(groups = {Group.class})
     private String email;
 
