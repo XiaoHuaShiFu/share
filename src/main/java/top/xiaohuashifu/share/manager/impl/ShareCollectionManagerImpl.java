@@ -43,10 +43,11 @@ public class ShareCollectionManagerImpl implements ShareCollectionManager {
      * 获取ShareCollectionVO通过id
      *
      * @param id 分享收藏编号
+     * @param userId 收藏用户的id
      * @return ShareCollectionVO
      */
     @Override
-    public Result<ShareCollectionVO> getShareCollection(Integer id) {
+    public Result<ShareCollectionVO> getShareCollection(Integer id, Integer userId) {
         // 获取shareCollection
         Result<ShareCollectionDO> getShareCollectionResult = shareCollectionService.getShareCollection(id);
         if (!getShareCollectionResult.isSuccess()) {
@@ -55,7 +56,7 @@ public class ShareCollectionManagerImpl implements ShareCollectionManager {
 
         ShareCollectionDO shareCollectionDO = getShareCollectionResult.getData();
         // 获取share
-        Result<ShareVO> getShareResult = shareManager.getShare(shareCollectionDO.getShareId(), 0);
+        Result<ShareVO> getShareResult = shareManager.getShare(shareCollectionDO.getShareId(), userId);
         if (!getShareResult.isSuccess()) {
             return Result.fail(getShareResult);
         }
@@ -86,7 +87,7 @@ public class ShareCollectionManagerImpl implements ShareCollectionManager {
         List<ShareCollectionDO> shareCollectionDOList = listShareCollectionsResult.getData().getList();
         List<ShareCollectionVO> shareCollectionVOList = new ArrayList<>();
         for (ShareCollectionDO shareCollectionDO : shareCollectionDOList) {
-            Result<ShareCollectionVO> getShareCollectionResult = getShareCollection(shareCollectionDO.getId());
+            Result<ShareCollectionVO> getShareCollectionResult = getShareCollection(shareCollectionDO.getId(), query.getUserId());
             if (!getShareCollectionResult.isSuccess()) {
                 return Result.fail(getShareCollectionResult);
             }

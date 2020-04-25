@@ -14,7 +14,7 @@ import top.xiaohuashifu.share.result.Result;
  */
 public interface ShareCollectionManager {
 
-    Result<ShareCollectionVO> getShareCollection(Integer id);
+    Result<ShareCollectionVO> getShareCollection(Integer id, Integer userId);
 
     Result<PageInfo<ShareCollectionVO>> listShareCollections(ShareCollectionQuery query);
 }

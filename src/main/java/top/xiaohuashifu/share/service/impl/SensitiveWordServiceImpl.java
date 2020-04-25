@@ -125,7 +125,7 @@ public class SensitiveWordServiceImpl implements SensitiveWordService {
         Set<String> sensitiveWordSet = cacheService.smembers(SensitiveWordConstant.KEY_OF_REDIS_FOR_SENSITIVE_WORD);
         for (String sensitiveWord : sensitiveWordSet) {
             if (sentence.contains(sensitiveWord)) {
-                return Result.fail(ErrorCode.INVALID_PARAMETER, "The word={0} is sensitive word.", sensitiveWord);
+                return Result.fail(ErrorCode.INVALID_PARAMETER, "\"{0}\"是敏感词汇，请不要使用。", sensitiveWord);
             }
         }
         return Result.success("The sentence is valid.");
