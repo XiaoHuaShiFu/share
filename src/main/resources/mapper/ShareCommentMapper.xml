@@ -39,7 +39,7 @@
                 and share_id = #{shareId}
             </if>
         </where>
-        order by update_time, likes, comments desc
+        order by likes desc, comment_time desc
     </select>
 
     <update id="increase" parameterType="map">

@@ -42,7 +42,7 @@
                 and share_comment_id = #{shareCommentId}
             </if>
         </where>
-        order by update_time, likes desc
+        order by comment_time, likes desc
     </select>
 
     <select id="count" resultType="integer" parameterType="integer">
