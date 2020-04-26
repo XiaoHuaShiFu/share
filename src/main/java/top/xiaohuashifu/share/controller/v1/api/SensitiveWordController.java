@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.xiaohuashifu.share.aspect.annotation.AdminLog;
 import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
+import top.xiaohuashifu.share.constant.AdminLogType;
 import top.xiaohuashifu.share.constant.TokenType;
 import top.xiaohuashifu.share.pojo.do0.SensitiveWordDO;
 import top.xiaohuashifu.share.pojo.group.GroupPost;
@@ -60,6 +62,8 @@ public class SensitiveWordController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = {TokenType.ADMIN})
+    // TODO: 2020/4/27 这里如果可以不用注解切面会更好
+    @AdminLog(type = AdminLogType.SENSITIVE_WORD_ADD)
     @ErrorHandler
     public Object post(@Validated(GroupPost.class) SensitiveWordDO sensitiveWordDO) {
         Result<SensitiveWordDO> result = sensitiveWordService.saveSensitiveWord(sensitiveWordDO);
@@ -109,6 +113,7 @@ public class SensitiveWordController {
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @TokenAuth(tokenType = {TokenType.ADMIN})
+    @AdminLog(type = AdminLogType.SENSITIVE_WORD_DELETE)
     @ErrorHandler
     public Object delete(@PathVariable @Id Integer id) {
         Result<String> result = sensitiveWordService.deleteSensitiveWord(id);

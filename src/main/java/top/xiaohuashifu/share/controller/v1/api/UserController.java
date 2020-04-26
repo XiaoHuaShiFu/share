@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.xiaohuashifu.share.aspect.annotation.AdminLog;
 import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
+import top.xiaohuashifu.share.constant.AdminLogType;
 import top.xiaohuashifu.share.constant.TokenType;
 import top.xiaohuashifu.share.pojo.ao.TokenAO;
 import top.xiaohuashifu.share.pojo.do0.UserDO;
@@ -167,6 +169,7 @@ public class UserController {
     // TODO: 2020/3/26 这里应该分开两个权限，分别进行权限控制
     // TODO: 2020/3/31 ADMIN可以控制修改一些信息，USER可以修改一些信息
     @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
+    @AdminLog(type = AdminLogType.USER)
     @ErrorHandler
     public Object put(TokenAO tokenAO, @Validated(Group.class) UserDO userDO, MultipartFile avatar) {
         // 管理员

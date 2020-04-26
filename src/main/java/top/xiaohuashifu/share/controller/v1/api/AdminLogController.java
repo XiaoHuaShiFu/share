@@ -67,7 +67,7 @@ public class AdminLogController {
     @TokenAuth(tokenType = TokenType.ADMIN)
     @ErrorHandler
     public Object post(TokenAO tokenAO, @Validated(GroupPost.class) AdminLogDO adminLogDO) {
-        // 越权新建分享
+        // 越权新建
         if (!tokenAO.getId().equals(adminLogDO.getAdminId())) {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
