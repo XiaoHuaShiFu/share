@@ -1,5 +1,6 @@
 package top.xiaohuashifu.share.controller.v1.api;
 
+import com.github.pagehelper.PageInfo;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,14 +126,20 @@ public class UserController {
     @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
     @ErrorHandler
     public Object get(UserQuery query) {
-        Result<List<UserDO>> result = userService.listUsers(query);
+        Result<PageInfo<UserDO>> result = userService.listUsers(query);
         if (!result.isSuccess()) {
             return result;
         }
 
-        return result.getData().stream()
+        PageInfo<UserDO> pageInfo = result.getData();
+        List<UserDO> userDOList = pageInfo.getList();
+        List<UserVO> userVOList = userDOList.stream()
                 .map(userDO -> mapper.map(userDO, UserVO.class))
                 .collect(Collectors.toList());
+        PageInfo<UserVO> pageInfo0 = mapper.map(pageInfo, PageInfo.class);
+        pageInfo0.setList(userVOList);
+
+        return pageInfo0;
     }
 
     /**

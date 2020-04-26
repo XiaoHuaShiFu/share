@@ -1,6 +1,7 @@
 package top.xiaohuashifu.share.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,14 +121,14 @@ public class UserServiceImpl implements UserService {
      * @return UserDOList
      */
     @Override
-    public Result<List<UserDO>> listUsers(UserQuery query) {
+    public Result<PageInfo<UserDO>> listUsers(UserQuery query) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<UserDO> userDOList = userMapper.listUsers(query);
-        if (userDOList.size() < 1) {
+        PageInfo<UserDO> pageInfo = new PageInfo<>(userMapper.listUsers(query));
+        if (pageInfo.getList().size() < 1) {
             Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
 
-        return Result.success(userDOList);
+        return Result.success(pageInfo);
     }
 
     /**

@@ -1,5 +1,6 @@
 package top.xiaohuashifu.share.service;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 import top.xiaohuashifu.share.constant.Operator;
 import top.xiaohuashifu.share.pojo.do0.UserDO;
@@ -22,7 +23,7 @@ public interface UserService {
 
     Result<UserDO> getUserByUsername(String username);
 
-    Result<List<UserDO>> listUsers(UserQuery query);
+    Result<PageInfo<UserDO>> listUsers(UserQuery query);
 
     Result<UserDO> updateUser(UserDO userDO, MultipartFile avatar);
 
