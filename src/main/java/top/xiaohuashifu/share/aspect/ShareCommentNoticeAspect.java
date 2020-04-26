@@ -83,9 +83,11 @@ public class ShareCommentNoticeAspect {
                     shareCommentVO.getContent().length() < MAX_NOTICE_CONTENT_LENGTH
                     ? shareCommentVO.getContent().length() : MAX_NOTICE_CONTENT_LENGTH)  + "...");
 
-            Map<String, Integer> keyValue = new HashMap<>();
+            Map<String, Object> keyValue = new HashMap<>();
             keyValue.put("shareId", shareCommentVO.getShareId());
             keyValue.put("shareCommentId", shareCommentVO.getId());
+            keyValue.put("avatarUrl", user.getData().getAvatarUrl());
+            keyValue.put("nickName", user.getData().getNickName());
             userNoticeDO.setKeyValue(gson.toJson(keyValue));
 
             userNoticeService.saveUserNotice(userNoticeDO);
