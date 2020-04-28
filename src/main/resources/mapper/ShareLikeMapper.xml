@@ -23,6 +23,32 @@
         where id = #{id}
     </select>
 
+    <select id="listShareLikes" parameterType="top.xiaohuashifu.share.pojo.query.ShareLikeQuery"
+            resultType="top.xiaohuashifu.share.pojo.do0.ShareLikeDO">
+        select
+        <include refid="BaseColumnList"/>
+        from share_like
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="idList != null">
+                id in (
+                <foreach collection="idList"  item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="shareId != null">
+                and share_id = #{shareId}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
     <select id="countByUserIdAndShareId" parameterType="map" resultType="integer">
         select count(*)
         from share_like

@@ -37,6 +37,12 @@ public interface ShareMapper {
     int count(Integer id);
 
 
+    /**
+     * 通过id和用户id查询分享的数量
+     * @param id 分享编号
+     * @param userId 用户编号
+     * @return 数量
+     */
     int countByIdAndUserId(@Param("id") Integer id, @Param("userId") Integer userId);
 
     /**

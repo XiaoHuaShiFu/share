@@ -1,5 +1,7 @@
 package top.xiaohuashifu.share.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import top.xiaohuashifu.share.constant.Operator;
 import top.xiaohuashifu.share.dao.ShareLikeMapper;
 import top.xiaohuashifu.share.pojo.do0.ShareDO;
 import top.xiaohuashifu.share.pojo.do0.ShareLikeDO;
+import top.xiaohuashifu.share.pojo.query.ShareLikeQuery;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
 import top.xiaohuashifu.share.service.ShareLikeService;
@@ -114,6 +117,23 @@ public class ShareLikeServiceImpl implements ShareLikeService {
         }
 
         return Result.success(shareLikeDO);
+    }
+
+    /**
+     * 获取PageInfo<ShareLikeDO>通过查询参数query
+     *
+     * @param query 查询参数
+     * @return PageInfo<ShareLikeDO>
+     */
+    @Override
+    public Result<PageInfo<ShareLikeDO>> listShareLikes(ShareLikeQuery query) {
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        PageInfo<ShareLikeDO> pageInfo = new PageInfo<>(shareLikeMapper.listShareLikes(query));
+        if (pageInfo.getList().isEmpty()) {
+            Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+
+        return Result.success(pageInfo);
     }
 
     /**

@@ -2,6 +2,9 @@ package top.xiaohuashifu.share.dao;
 
 import org.apache.ibatis.annotations.Param;
 import top.xiaohuashifu.share.pojo.do0.ShareLikeDO;
+import top.xiaohuashifu.share.pojo.query.ShareLikeQuery;
+
+import java.util.List;
 
 public interface ShareLikeMapper {
 
@@ -26,6 +29,15 @@ public interface ShareLikeMapper {
      * @return ShareLikeDO
      */
     ShareLikeDO getShareLike(Integer id);
+
+    /**
+     * 获取query过滤参数后的分享点赞列表，包含pageNum，pageSize等过滤参数，
+     *
+     * @param query 查询参数
+     * @return ShareLikeDOList
+     */
+    List<ShareLikeDO> listShareLikes(ShareLikeQuery query);
+
 
     /**
      * 对应userId和shareId的分享点赞数量

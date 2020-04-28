@@ -1,6 +1,8 @@
 package top.xiaohuashifu.share.service;
 
+import com.github.pagehelper.PageInfo;
 import top.xiaohuashifu.share.pojo.do0.ShareLikeDO;
+import top.xiaohuashifu.share.pojo.query.ShareLikeQuery;
 import top.xiaohuashifu.share.result.Result;
 
 /**
@@ -16,6 +18,8 @@ public interface ShareLikeService {
     Result deleteShareLike(Integer userId, Integer shareId);
 
     Result<ShareLikeDO> getShareLike(Integer id);
+
+    Result<PageInfo<ShareLikeDO>> listShareLikes(ShareLikeQuery query);
 
     Result<Integer> countByUserIdAndShareId(Integer userId, Integer shareId);
 

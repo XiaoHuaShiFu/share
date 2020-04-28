@@ -1,5 +1,6 @@
 package top.xiaohuashifu.share.controller.v1.api;
 
+import com.github.pagehelper.PageInfo;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import top.xiaohuashifu.share.aspect.annotation.ErrorHandler;
 import top.xiaohuashifu.share.auth.TokenAuth;
 import top.xiaohuashifu.share.constant.TokenType;
+import top.xiaohuashifu.share.manager.ShareLikeManager;
 import top.xiaohuashifu.share.pojo.ao.TokenAO;
 import top.xiaohuashifu.share.pojo.do0.ShareLikeDO;
 import top.xiaohuashifu.share.pojo.group.GroupDelete;
 import top.xiaohuashifu.share.pojo.group.GroupPost;
+import top.xiaohuashifu.share.pojo.query.ShareLikeQuery;
 import top.xiaohuashifu.share.pojo.vo.ShareLikeVO;
 import top.xiaohuashifu.share.result.ErrorCode;
 import top.xiaohuashifu.share.result.Result;
@@ -35,10 +38,13 @@ public class ShareLikeController {
 
     private final ShareLikeService shareLikeService;
 
+    private final ShareLikeManager shareLikeManager;
+
     @Autowired
-    public ShareLikeController(Mapper mapper, ShareLikeService shareLikeService) {
+    public ShareLikeController(Mapper mapper, ShareLikeService shareLikeService, ShareLikeManager shareLikeManager) {
         this.mapper = mapper;
         this.shareLikeService = shareLikeService;
+        this.shareLikeManager = shareLikeManager;
     }
 
     /**
@@ -101,6 +107,23 @@ public class ShareLikeController {
 
         Result result = shareLikeService.deleteShareLike(shareLikeDO.getUserId(), shareLikeDO.getShareId());
         return !result.isSuccess() ? result : result.getMessage();
+    }
+
+    /**
+     * 查询点赞列表
+     * @param query 查询参数
+     * @return ShareLikeVOList
+     *
+     * @success:
+     * HttpStatus.OK
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = {TokenType.USER, TokenType.ADMIN})
+    @ErrorHandler
+    public Object get(ShareLikeQuery query) {
+        Result<PageInfo<ShareLikeVO>> result = shareLikeManager.listShareLikes(query);
+        return result.isSuccess() ? result.getData() : result;
     }
 
 }

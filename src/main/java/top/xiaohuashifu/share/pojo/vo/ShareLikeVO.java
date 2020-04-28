@@ -18,14 +18,17 @@ public class ShareLikeVO {
 
     private Date createTime;
 
+    private UserVO user;
+
     public ShareLikeVO() {
     }
 
-    public ShareLikeVO(Integer id, Integer userId, Integer shareId, Date createTime) {
+    public ShareLikeVO(Integer id, Integer userId, Integer shareId, Date createTime, UserVO user) {
         this.id = id;
         this.userId = userId;
         this.shareId = shareId;
         this.createTime = createTime;
+        this.user = user;
     }
 
     public Integer getId() {
@@ -60,6 +63,13 @@ public class ShareLikeVO {
         this.createTime = createTime;
     }
 
+    public UserVO getUser() {
+        return user;
+    }
+
+    public void setUser(UserVO user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
@@ -68,6 +78,7 @@ public class ShareLikeVO {
                 ", userId=" + userId +
                 ", shareId=" + shareId +
                 ", createTime=" + createTime +
+                ", user=" + user +
                 '}';
     }
 }
