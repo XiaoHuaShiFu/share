@@ -11,7 +11,7 @@
     <groupId>com.xiaohuashifu</groupId>
     <artifactId>tm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>tm</name>
     <description>Team management base on SSM</description>
 
