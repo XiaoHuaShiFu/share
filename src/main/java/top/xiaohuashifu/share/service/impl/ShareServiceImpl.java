@@ -21,7 +21,7 @@ import top.xiaohuashifu.share.util.BeanUtils;
 import java.util.Date;
 
 /**
- * 描述:用户服务层
+ * 描述:分享服务层
  *
  * @author xhsf
  * @email 827032783@qq.com

@@ -3,7 +3,7 @@ package top.xiaohuashifu.share.result;
 import org.springframework.http.HttpStatus;
 
 /**
- * 描述: 错误码与错误信息的映射
+ * 描述: 错误码与错误信息的映射，参考自阿里巴巴状态码规范。
  *
  * @author xhsf
  * @email 827032783@qq.com

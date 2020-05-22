@@ -25,10 +25,9 @@ public class ShareQuery {
      */
     private String content;
 
-    private Boolean open;
-
-    // TODO: 2020/4/23 这里要做校验
     private String orderBy;
+
+    private Boolean open;
 
     public ShareQuery() {
     }
